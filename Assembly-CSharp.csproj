@@ -58,12 +58,17 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Troops\SoldierMovement.cs" />
     <Compile Include="Assets\Scripts\SpawnManager.cs" />
+    <Compile Include="Assets\Scripts\TroopRegistry.cs" />
     <Compile Include="Assets\Scripts\Troops\ArcherMovement.cs" />
     <Compile Include="Assets\Scripts\CameraMovement.cs" />
     <Compile Include="Assets\Scripts\SelectionBox.cs" />
     <Compile Include="Assets\Scripts\Troops\Troop.cs" />
+    <Compile Include="Assets\Scripts\Troop Formations\TroopFormation.cs" />
     <Compile Include="Assets\Scripts\p1SEBarRender.cs" />
     <Compile Include="Assets\Scripts\Troops\ClubsterMovement.cs" />
+    <Compile Include="Assets\Scripts\Troop Formations\FSoldiers.cs" />
+    <Compile Include="Assets\Scripts\Troop Formations\FArchers.cs" />
+    <Compile Include="Assets\Scripts\Troop Formations\FClubster.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

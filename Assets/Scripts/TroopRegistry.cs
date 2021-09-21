@@ -8,7 +8,42 @@ public class TroopRegistry : MonoBehaviour
 {
     public static TroopRegistry instance;
 
-    public GameObject[] troops;
+    [SerializeField] private GameObject[] troops;
+
+    [SerializeField] private Transform blueSpawn;
+    [SerializeField] private Transform redSpawn;
+
+    /// <summary>
+    /// Returns the list of troop GameObjects
+    /// </summary>
+    /// <returns>The aforementioned list. Use the index (int)TroopType.INTERNAL_NAME to access that troop</returns>
+    public GameObject[] GetTroopList()
+    {
+        return troops;
+    }
+
+    public GameObject GetTroopPrefab(TroopType type)
+    {
+        return troops[(int)type];
+    }
+
+    /// <summary>
+    /// Returns the blue team spawn point
+    /// </summary>
+    /// <returns>Use the position and rotation properties to determine where to spawn troops</returns>
+    public Transform GetBlueSpawn()
+    {
+        return blueSpawn;
+    }
+
+    /// <summary>
+    /// Returns the red team spawn point
+    /// </summary>
+    /// <returns>Use the position and rotation properties to determine where to spawn troops</returns>
+    public Transform GetRedSpawn()
+    {
+        return redSpawn;
+    }
 
     private void Awake()
     {
@@ -16,6 +51,9 @@ public class TroopRegistry : MonoBehaviour
     }
 }
 
+/// <summary>
+/// Used to easily access the troop prefabs from anywhere. When a troop is added to the troops array, add its internal name here
+/// </summary>
 public enum TroopType
 {
     SOLDIER,

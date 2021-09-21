@@ -34,6 +34,10 @@ public class SpawnManager: MonoBehaviour {
     private void Awake()
     {
         cameraMovement.SetTeam(team);
+        // Debugging
+        //summonEnergy = 3;
+        //TroopFormation t = ScriptableObject.CreateInstance<FSoldiers>();
+        //t.TrySpawnFormation(this);
     }
 
     /// <summary>
@@ -43,6 +47,15 @@ public class SpawnManager: MonoBehaviour {
     public float GetSummonEnergy()
     {
         return summonEnergy;
+    }
+
+    /// <summary>
+    /// Returns this spawn manager's team
+    /// </summary>
+    /// <returns>The team</returns>
+    public Team GetTeam()
+    {
+        return team;
     }
 
     /// <summary>

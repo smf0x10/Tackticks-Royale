@@ -2,7 +2,8 @@
 using UnityEngine;
 
 /// <summary>
-/// Class representing a troop formation. One subclass of this is instantiated for each spawn button on the HUD.
+/// Class representing a troop formation. One subclass of this is instantiated for each spawn button on the HUD. Subclasses of this class are named starting with an F
+/// example: FSoldiers
 /// TODO: Actually make it do this
 /// </summary>
 public class TroopFormation : ScriptableObject
@@ -34,15 +35,32 @@ public class TroopFormation : ScriptableObject
     /// <param name="team">The side the troop is on</param>
     protected static void SpawnTroop(TroopType troopType, Team team)
     {
-        throw new NotImplementedException();
+        Vector3 pos;
+        Quaternion rot;
+        if (team == Team.Blue)
+        {
+            pos = TroopRegistry.instance.GetBlueSpawn().position;
+            rot = TroopRegistry.instance.GetBlueSpawn().rotation;
+        }
+        else
+        {
+            pos = TroopRegistry.instance.GetBlueSpawn().position;
+            rot = TroopRegistry.instance.GetRedSpawn().rotation;
+        }
+
+        GameObject newTroop = Instantiate(TroopRegistry.instance.GetTroopPrefab(troopType), pos, rot);
+
+        newTroop.GetComponent<Troop>().SetTeam(team);
+        // TODO: Set clothes color properly as well
+        //throw new NotImplementedException();
     }
 
     /// <summary>
     /// Spawns this formation. Does not check or use up summon energy reserves.
     /// </summary>
-    protected virtual void SpawnFormation()
+    protected virtual void SpawnFormation(Team team)
     {
-        Debug.LogWarning("The SpawnFormation() function has not been overridden for this class. No troops will be spawned");
+        Debug.LogWarning("The SpawnFormation() function has not been overridden for this class. No troops will be spawned.");
     }
 
     /// <summary>
@@ -53,7 +71,7 @@ public class TroopFormation : ScriptableObject
     {
         if (manager.UseSummonEnergy(GetCost()))
         {
-            SpawnFormation();
+            SpawnFormation(manager.GetTeam());
         }
     }
 }
