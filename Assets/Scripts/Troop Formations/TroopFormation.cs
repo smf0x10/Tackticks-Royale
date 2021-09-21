@@ -3,6 +3,7 @@ using UnityEngine;
 
 /// <summary>
 /// Class representing a troop formation. One subclass of this is instantiated for each spawn button on the HUD.
+/// TODO: Actually make it do this
 /// </summary>
 public class TroopFormation : ScriptableObject
 {
@@ -11,7 +12,7 @@ public class TroopFormation : ScriptableObject
     /// <summary>
     /// Returns the summon energy cost of this formation. Override this method to change it
     /// </summary>
-    /// <returns></returns>
+    /// <returns>The summon energy cost to spawn this formation once</returns>
     public virtual int GetCost()
     {
         return DEFAULT_COST;
