@@ -403,9 +403,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa01cdd1da0c09a42b0072bca1eff45e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 195391342954140556}
-  target: {fileID: 0}
-  targetObject: {fileID: 0}
   hp: 5
   team: 0
   range: 2.5

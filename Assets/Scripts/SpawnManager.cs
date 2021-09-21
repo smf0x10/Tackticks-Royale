@@ -45,6 +45,21 @@ public class SpawnManager: MonoBehaviour {
         return summonEnergy;
     }
 
+    /// <summary>
+    /// Uses up some summon energy, provided there is enough summon energy available
+    /// </summary>
+    /// <param name="amount">The amount to use</param>
+    /// <returns>True if there was enough summon energy available, false otherwise</returns>
+    public bool UseSummonEnergy(int amount)
+    {
+        if (summonEnergy >= amount)
+        {
+            summonEnergy -= amount;
+            return true;
+        }
+        return false;
+    }
+
 	
 	void Update ()
     {
