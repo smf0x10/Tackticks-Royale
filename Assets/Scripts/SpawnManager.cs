@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using UnityEngine.InputSystem;
+﻿using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using UnityEngine;
 
 /// <summary>
 /// The player script. One of these gets instantiated for each player.
@@ -12,13 +13,10 @@ public class SpawnManager: MonoBehaviour {
     private float scroll = 0;
     private float scrollSensitivity = 1f;
     [SerializeField] private Team team;
-    [SerializeField] private GameObject soldier;
-    [SerializeField] private GameObject archer;
-    [SerializeField] private GameObject clubster;
-    [SerializeField] private Vector3 p1Spawn;
-    [SerializeField] private Vector3 p2Spawn;
-    [SerializeField] private Quaternion p1SpawnRotation = new Quaternion(0, 0, 0, 0);
-    [SerializeField] private Quaternion p2SpawnRotation = new Quaternion(0, 0, 0, 0);
+
+    [SerializeField] private GameObject spawnButton;
+    [SerializeField] private Transform canvas;
+    [SerializeField] private string[] formations;
 
     // Rally troop selection
     [SerializeField] private Camera cam;
@@ -34,6 +32,16 @@ public class SpawnManager: MonoBehaviour {
     private void Awake()
     {
         cameraMovement.SetTeam(team);
+
+        for (int i = 0; i < formations.Length; i++)
+        {
+            Button sp = Instantiate(spawnButton, canvas.GetChild(i), false).GetComponent<Button>();
+            TroopFormation tf = (TroopFormation)ScriptableObject.CreateInstance(formations[i]);
+
+            sp.GetComponentInChildren<Text>().text = tf.GetName() + "\n" + tf.GetCost();
+
+            sp.onClick.AddListener(() => tf.TrySpawnFormation(this));
+        }
         // Debugging
         //summonEnergy = 3;
         //TroopFormation t = ScriptableObject.CreateInstance<FSoldiers>();
@@ -126,45 +134,45 @@ public class SpawnManager: MonoBehaviour {
         scroll = (float)ctx.ReadValueAsObject();
     }
 
-    /// <summary>
-    /// Spawns three soldiers on this SpawnManager's team
-    /// </summary>
-    public void Soldiers()
-    {
-        // TODO: Create a scaleable interface for adding new troop formations
-        for (int i = 0; i < 3; i++)
-        {
-            Troop t = Instantiate(soldier, p1Spawn, p1SpawnRotation).GetComponent<Troop>();
-            t.SetTeam(team);
-        }
-        summonEnergy -= 3; // Just using a constant for now
-    }
+    ///// <summary>
+    ///// Spawns three soldiers on this SpawnManager's team
+    ///// </summary>
+    //public void Soldiers()
+    //{
+    //    // TODO: Create a scaleable interface for adding new troop formations
+    //    for (int i = 0; i < 3; i++)
+    //    {
+    //        Troop t = Instantiate(soldier, p1Spawn, p1SpawnRotation).GetComponent<Troop>();
+    //        t.SetTeam(team);
+    //    }
+    //    summonEnergy -= 3; // Just using a constant for now
+    //}
 
-    /// <summary>
-    /// Spawns two archers on this SpawnManager's team
-    /// </summary>
-    public void Archers()
-    {
-        for (int i = 0; i < 2; i++)
-        {
-            Troop t = Instantiate(archer, p1Spawn, p1SpawnRotation).GetComponent<Troop>();
-            t.SetTeam(team);
-        }
-        summonEnergy -= 3; // Just using a constant for now
-    }
+    ///// <summary>
+    ///// Spawns two archers on this SpawnManager's team
+    ///// </summary>
+    //public void Archers()
+    //{
+    //    for (int i = 0; i < 2; i++)
+    //    {
+    //        Troop t = Instantiate(archer, p1Spawn, p1SpawnRotation).GetComponent<Troop>();
+    //        t.SetTeam(team);
+    //    }
+    //    summonEnergy -= 3; // Just using a constant for now
+    //}
 
-    /// <summary>
-    /// Spawns one clubster on this SpawnManager's team
-    /// </summary>
-    public void Clubster()
-    {
-        for (int i = 0; i < 1; i++)
-        {
-            Troop t = Instantiate(clubster, p1Spawn, p1SpawnRotation).GetComponent<Troop>();
-            t.SetTeam(team);
-        }
-        summonEnergy -= 4; // Just using a constant for now
-    }
+    ///// <summary>
+    ///// Spawns one clubster on this SpawnManager's team
+    ///// </summary>
+    //public void Clubster()
+    //{
+    //    for (int i = 0; i < 1; i++)
+    //    {
+    //        Troop t = Instantiate(clubster, p1Spawn, p1SpawnRotation).GetComponent<Troop>();
+    //        t.SetTeam(team);
+    //    }
+    //    summonEnergy -= 4; // Just using a constant for now
+    //}
 
     /// <summary>
     /// Called when the left mouse button is clicked or released
