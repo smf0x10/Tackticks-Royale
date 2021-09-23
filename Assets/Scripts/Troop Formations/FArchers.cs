@@ -12,7 +12,7 @@
 
     protected override void SpawnFormation(Team team)
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 2; i++)
         {
             SpawnTroop(TroopType.ARCHER, team);
         }

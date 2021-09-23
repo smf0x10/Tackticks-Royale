@@ -22,7 +22,7 @@ public class TroopFormation : ScriptableObject
     /// <summary>
     /// Returns the name to show on the spawn button
     /// </summary>
-    /// <returns>The name to show on the spawn button, minus the energy cost</returns>
+    /// <returns>The name to show on the spawn button; the energy cost is added later</returns>
     public virtual string GetName()
     {
         return "none";
@@ -56,7 +56,7 @@ public class TroopFormation : ScriptableObject
     }
 
     /// <summary>
-    /// Spawns this formation. Does not check or use up summon energy reserves.
+    /// Spawns this formation. Does not check or use up summon energy reserves; these operations are done when deciding whether to call the method in the first place
     /// </summary>
     protected virtual void SpawnFormation(Team team)
     {
