@@ -23,6 +23,10 @@ public class SelectionBox : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Returns the troops selected by this box
+    /// </summary>
+    /// <returns>A list containing the troop components currently in this selection box</returns>
     public List<Troop> GetSelection()
     {
         return selected;

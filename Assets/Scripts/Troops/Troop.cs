@@ -178,4 +178,14 @@ public class Troop : MonoBehaviour
     {
         team = t;
     }
+
+    /// <summary>
+    /// Sets this troop to target the specified point
+    /// </summary>
+    /// <param name="newTarget">The position to target</param>
+    public void SetRallyTarget(Vector3 newTarget)
+    {
+        // TODO: implementation
+        Debug.Log(newTarget);
+    }
 }

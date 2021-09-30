@@ -1,6 +1,7 @@
 ﻿using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine;
+using System.Collections.Generic;
 
 /// <summary>
 /// The player script. One of these gets instantiated for each player.
@@ -27,6 +28,8 @@ public class SpawnManager: MonoBehaviour {
     private bool rMouseDown = false;
     private Vector3 draggingOrigin;
     private RaycastHit currentDrag;
+
+    private List<Troop> selectedTroops;
 
 
     private void Awake()
@@ -177,24 +180,58 @@ public class SpawnManager: MonoBehaviour {
     /// <summary>
     /// Called when the left mouse button is clicked or released
     /// </summary>
-    public void OnClick()
+    public void OnClick(InputAction.CallbackContext ctx)
     {
-        mouseDown = !mouseDown;
+        //Debug.Log(ctx);
+        bool mouseWasDown = mouseDown;
+        mouseDown = ctx.ReadValueAsButton();
+        if (mouseDown && mouseWasDown)
+        {
+            return; // To stop the event from triggering twice upon pressing the mouse
+        }
         if (!mouseDown && draggingSelection)
         {
             draggingSelection = false;
+            selectedTroops = currentSelection.GetComponent<SelectionBox>().GetSelection(); // This might cause a memory leak. Not sure.
+            Destroy(currentSelection);
             return;
         }
-        RaycastHit[] thingsClicked = Physics.RaycastAll(cam.ScreenPointToRay(Mouse.current.position.ReadValue()), 500, 1, QueryTriggerInteraction.Ignore);
-        for (int i = 0; i < thingsClicked.Length; i++)
+        if (selectedTroops != null)
         {
-            if (thingsClicked[i].collider.GetComponent<Troop>())
-                continue;
-            currentSelection = Instantiate(selectionPrefab, thingsClicked[i].point, new Quaternion(0, 0, 0, 0));
-            draggingOrigin = thingsClicked[i].point;
-            draggingSelection = true;
-            break;
+            Physics.Raycast(cam.ScreenPointToRay(Mouse.current.position.ReadValue()), out RaycastHit hit, 500, 1, QueryTriggerInteraction.Ignore);
+            SetSelectionTarget(hit.point);
+            return;
         }
+        if (mouseDown && !draggingSelection)
+        {
+            RaycastHit[] thingsClicked = Physics.RaycastAll(cam.ScreenPointToRay(Mouse.current.position.ReadValue()), 500, 1, QueryTriggerInteraction.Ignore);
+            for (int i = 0; i < thingsClicked.Length; i++)
+            {
+                if (thingsClicked[i].collider.GetComponent<Troop>())
+                    continue;
+                currentSelection = Instantiate(selectionPrefab, thingsClicked[i].point, new Quaternion(0, 0, 0, 0));
+                draggingOrigin = thingsClicked[i].point;
+                draggingSelection = true;
+                break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Sets the selected troops to target a position
+    /// </summary>
+    /// <param name="pos">The position to target</param>
+    private void SetSelectionTarget(Vector3 pos)
+    {
+        foreach(Troop t in selectedTroops)
+        {
+            if (t == null)
+            {
+                continue;
+            }
+            t.SetRallyTarget(pos);
+        }
+        selectedTroops = null;
     }
 }
 
