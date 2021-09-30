@@ -12480,7 +12480,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1470310615}
         m_TargetAssemblyTypeName: SpawnManager, Assembly-CSharp
         m_MethodName: OnClick
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -13185,8 +13185,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1957200070}
   m_LocalRotation: {x: -0.77536625, y: -0, z: -0, w: 0.63151187}
-  m_LocalPosition: {x: -14.763951, y: 2, z: 3.3400004}
-  m_LocalScale: {x: 3, y: 4, z: 2}
+  m_LocalPosition: {x: -14.763951, y: 1.873, z: 3.366}
+  m_LocalScale: {x: 3, y: 4, z: 3}
   m_Children: []
   m_Father: {fileID: 1698804564}
   m_RootOrder: 8
