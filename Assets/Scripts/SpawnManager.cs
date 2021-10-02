@@ -30,12 +30,14 @@ public class SpawnManager: MonoBehaviour {
     private RaycastHit currentDrag;
 
     private List<Troop> selectedTroops;
+    public static float SE_FILL_SPEED = 0.1f;
 
 
     private void Awake()
     {
         cameraMovement.SetTeam(team);
 
+        summonEnergy = 5;
         for (int i = 0; i < formations.Length; i++)
         {
             Button sp = Instantiate(spawnButton, canvas.GetChild(i), false).GetComponent<Button>();
@@ -45,10 +47,6 @@ public class SpawnManager: MonoBehaviour {
 
             sp.onClick.AddListener(() => tf.TrySpawnFormation(this));
         }
-        // Debugging
-        //summonEnergy = 3;
-        //TroopFormation t = ScriptableObject.CreateInstance<FSoldiers>();
-        //t.TrySpawnFormation(this);
     }
 
     /// <summary>
@@ -89,7 +87,7 @@ public class SpawnManager: MonoBehaviour {
     {
         if (summonEnergy < 20f)
         {
-            summonEnergy += 0.5f * Time.deltaTime;
+            summonEnergy += 0.1f * Time.deltaTime;
         }
         if (draggingSelection)
         {
@@ -136,46 +134,6 @@ public class SpawnManager: MonoBehaviour {
     {
         scroll = (float)ctx.ReadValueAsObject();
     }
-
-    ///// <summary>
-    ///// Spawns three soldiers on this SpawnManager's team
-    ///// </summary>
-    //public void Soldiers()
-    //{
-    //    // TODO: Create a scaleable interface for adding new troop formations
-    //    for (int i = 0; i < 3; i++)
-    //    {
-    //        Troop t = Instantiate(soldier, p1Spawn, p1SpawnRotation).GetComponent<Troop>();
-    //        t.SetTeam(team);
-    //    }
-    //    summonEnergy -= 3; // Just using a constant for now
-    //}
-
-    ///// <summary>
-    ///// Spawns two archers on this SpawnManager's team
-    ///// </summary>
-    //public void Archers()
-    //{
-    //    for (int i = 0; i < 2; i++)
-    //    {
-    //        Troop t = Instantiate(archer, p1Spawn, p1SpawnRotation).GetComponent<Troop>();
-    //        t.SetTeam(team);
-    //    }
-    //    summonEnergy -= 3; // Just using a constant for now
-    //}
-
-    ///// <summary>
-    ///// Spawns one clubster on this SpawnManager's team
-    ///// </summary>
-    //public void Clubster()
-    //{
-    //    for (int i = 0; i < 1; i++)
-    //    {
-    //        Troop t = Instantiate(clubster, p1Spawn, p1SpawnRotation).GetComponent<Troop>();
-    //        t.SetTeam(team);
-    //    }
-    //    summonEnergy -= 4; // Just using a constant for now
-    //}
 
     /// <summary>
     /// Called when the left mouse button is clicked or released

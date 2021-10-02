@@ -12,33 +12,35 @@ public class Troop : MonoBehaviour
     private GameObject targetObject;
     private float lastDist;
     private float atkTime;
-    [SerializeField] private int hp;
+    protected int hp;
     [SerializeField] protected Team team;
-    /// <summary>
-    /// The range at which this troop can attack. 
-    /// There is currently no projectile logic in place, so ranged units just have this set higher than normal
-    /// </summary>
-    [SerializeField] protected float range;
-    /// <summary>
-    /// The number of hit points an attack from this troop deals
-    /// </summary>
-    [SerializeField] protected int atk;
-    /// <summary>
-    /// The knockback of this troop's attack
-    /// </summary>
-    [SerializeField] protected float kb;
-    /// <summary>
-    /// The delay between attacks, in seconds
-    /// </summary>
-    [SerializeField] protected float atkDelay;
-    /// <summary>
-    /// The amount of time this troop must be lying on the ground before it can get up
-    /// </summary>
-    [SerializeField] protected float getUpDelay;
+    ///// <summary>
+    ///// The range at which this troop can attack. 
+    ///// There is currently no projectile logic in place, so ranged units just have this set higher than normal
+    ///// </summary>
+    //[SerializeField] protected float range;
+    ///// <summary>
+    ///// The number of hit points an attack from this troop deals
+    ///// </summary>
+    //[SerializeField] protected int atk;
+    ///// <summary>
+    ///// The knockback of this troop's attack
+    ///// </summary>
+    //[SerializeField] protected float kb;
+    ///// <summary>
+    ///// The delay between attacks, in seconds
+    ///// </summary>
+    //[SerializeField] protected float atkDelay;
+    ///// <summary>
+    ///// The amount of time this troop must be lying on the ground before it can get up
+    ///// </summary>
+    //[SerializeField] protected float getUpDelay;
     private Animator animator;
     private NavMeshAgent agent;
     private Rigidbody rb;
     private float timeToGetUp;
+    private bool isRallied;
+    private Vector3 rallyTarget;
 
     public static List<Troop> activeTroops = new List<Troop>();
     /// <summary>
@@ -68,7 +70,9 @@ public class Troop : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-        atkTime = atkDelay;
+        atkTime = GetAtkDelay();
+        hp = GetMaxHp();
+        agent.speed = GetMoveSpeed();
         Init();
     }
 
@@ -80,9 +84,83 @@ public class Troop : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Number of hit points this troop has
+    /// </summary>
+    public virtual int GetMaxHp()
+    {
+        return 1;
+    }
+
+    /// <summary>
+    /// The range at which this troop can attack. 
+    /// There is currently no projectile logic in place, so ranged units just have this set higher than normal
+    /// </summary>
+    public virtual float GetAtkRange()
+    {
+        return 2;
+    }
+
+    /// <summary>
+    /// The number of hit points an attack from this troop deals
+    /// </summary>
+    public virtual int GetAtk()
+    {
+        return 0;
+    }
+
+    /// <summary>
+    /// The knockback of this troop's attack
+    /// </summary>
+    public virtual float GetKnockback()
+    {
+        return 0;
+    }
+
+    /// <summary>
+    /// The delay between attacks, in seconds
+    /// </summary>
+    public virtual float GetAtkDelay()
+    {
+        return 1;
+    }
+
+    /// <summary>
+    /// The amount of time this troop must be lying on the ground before it can get up
+    /// </summary>
+    public virtual float GetGetUpDelay()
+    {
+        return 1;
+    }
+
+    /// <summary>
+    /// The speed for this troop to move at
+    /// </summary>
+    /// <returns></returns>
+    public virtual float GetMoveSpeed()
+    {
+        return 1;
+    }
+
     protected virtual void Update()
     {
-        lastDist = MAX_TARGET_DISTANCE;
+        ChooseTarget();
+        if (atkTime > 0)
+        {
+            atkTime -= Time.deltaTime;
+        }
+        if (timeToGetUp > 0 && rb.velocity.magnitude < 0.5f)
+        {
+            timeToGetUp -= Time.deltaTime;
+            if (timeToGetUp <= 0)
+                GetUp();
+        }
+        HandleDeath();
+    }
+
+    private void ChooseTarget()
+    {
+        lastDist = GetTargetDistance(isRallied);
         for (int i = 0; i < activeTroops.Count; i++)
         {
             if (activeTroops[i].GetTeam() == team)
@@ -94,12 +172,12 @@ public class Troop : MonoBehaviour
                 lastDist = Vector3.Distance(activeTroops[i].transform.position, transform.position);
             }
         }
-        if (lastDist < MAX_TARGET_DISTANCE)
+        if (lastDist < GetTargetDistance(isRallied))
         {
             if (agent.enabled)
             {
                 agent.destination = target.position;
-                if (Vector3.Distance(transform.position, targetObject.transform.position) <= range)
+                if (Vector3.Distance(transform.position, targetObject.transform.position) <= GetAtkRange())
                 {
                     agent.isStopped = true;
                     // Random delay added for attacks to stop troops that execute their script first from always having priority
@@ -115,20 +193,15 @@ public class Troop : MonoBehaviour
         else if (agent.enabled)
         {
             agent.isStopped = false;
-            agent.destination = new Vector3(-32, 2, 0);
+            if (isRallied)
+            {
+                agent.destination = rallyTarget;
+            }
+            else
+            {
+                agent.destination = TroopRegistry.instance.GetRedSpawn().position;
+            }
         }
-
-        if (atkTime > 0)
-        {
-            atkTime -= Time.deltaTime;
-        }
-        if (timeToGetUp > 0 && rb.velocity.magnitude < 0.5f)
-        {
-            timeToGetUp -= Time.deltaTime;
-            if (timeToGetUp <= 0)
-                GetUp();
-        }
-        HandleDeath();
     }
 
     /// <summary>
@@ -138,8 +211,8 @@ public class Troop : MonoBehaviour
     protected virtual void Attack(Troop atkTarget)
     {
         animator.Play("attack");
-        atkTarget.TakeDamage(this, atk, true, kb);
-        atkTime = atkDelay;
+        atkTarget.TakeDamage(this, GetAtk(), true, GetKnockback());
+        atkTime = GetAtkDelay();
     }
 
     /// <summary>
@@ -155,8 +228,8 @@ public class Troop : MonoBehaviour
         {
             rb.isKinematic = false;
             agent.enabled = false;
-            timeToGetUp = getUpDelay;
-            rb.AddExplosionForce(kbPwr, attacker.transform.position, range * 2, 4);
+            timeToGetUp = GetGetUpDelay();
+            rb.AddExplosionForce(kbPwr, attacker.transform.position, GetAtkRange() * 2, 4);
         }
     }
 
@@ -169,14 +242,35 @@ public class Troop : MonoBehaviour
         agent.enabled = true;
     }
 
+    /// <summary>
+    /// Returns the team this troop is on
+    /// </summary>
+    /// <returns>Team.BLUE or Team.RED</returns>
     public Team GetTeam()
     {
         return team;
     }
 
+    /// <summary>
+    /// Updates the team this troop is on
+    /// </summary>
+    /// <param name="t">the new team</param>
     public void SetTeam(Team t)
     {
+        // TODO: Set the troop's clothes
         team = t;
+    }
+
+    public virtual float GetTargetDistance(bool rallied)
+    {
+        if (rallied)
+        {
+            return 4;
+        }
+        else
+        {
+            return 8;
+        }
     }
 
     /// <summary>
@@ -186,6 +280,8 @@ public class Troop : MonoBehaviour
     public void SetRallyTarget(Vector3 newTarget)
     {
         // TODO: implementation
-        Debug.Log(newTarget);
+        rallyTarget = newTarget;
+        isRallied = true;
+        //Debug.Log(newTarget);
     }
 }

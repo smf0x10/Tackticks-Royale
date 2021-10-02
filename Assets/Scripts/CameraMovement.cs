@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem;
 
+/// <summary>
+/// Attatches to the camera object. Provides an interface to move the camera
+/// </summary>
 public class CameraMovement : MonoBehaviour {
-    private Vector3 p1topPos = new Vector3(34.6f, 44.4f, 0);
-    private Vector3 p1topRot = new Vector3(60, 270, 0);
-    private Vector3 p1sidePos = new Vector3(0, 26.6f, 46.7f);
-    private Vector3 p1sideRot = new Vector3(10, 180, 0);
-    private Vector3 p2topPos = new Vector3(-34.6f, 44.4f, 0);
-    private Vector3 p2topRot = new Vector3(60, 90, 0);
-    private Vector3 p2sidePos = new Vector3(0, 26.6f, -46.7f);
-    private Vector3 p2sideRot = new Vector3(10, 0, 0);
+    private readonly Vector3 p1topPos = new Vector3(34.6f, 44.4f, 0);
+    private readonly Vector3 p1topRot = new Vector3(60, 270, 0);
+    private readonly Vector3 p1sidePos = new Vector3(0, 26.6f, 46.7f);
+    private readonly Vector3 p1sideRot = new Vector3(10, 180, 0);
+    private readonly Vector3 p2topPos = new Vector3(-34.6f, 44.4f, 0);
+    private readonly Vector3 p2topRot = new Vector3(60, 90, 0);
+    private readonly Vector3 p2sidePos = new Vector3(0, 26.6f, -46.7f);
+    private readonly Vector3 p2sideRot = new Vector3(10, 0, 0);
     private Team team;
 
     /// <summary>
