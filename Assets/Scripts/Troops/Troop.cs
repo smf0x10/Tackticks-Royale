@@ -14,6 +14,7 @@ public class Troop : MonoBehaviour
     private float atkTime;
     protected int hp;
     [SerializeField] protected Team team;
+    [SerializeField] private MeshRenderer[] teamClothes; // Mesh renderers to change color depending on the team
     ///// <summary>
     ///// The range at which this troop can attack. 
     ///// There is currently no projectile logic in place, so ranged units just have this set higher than normal
@@ -199,7 +200,14 @@ public class Troop : MonoBehaviour
             }
             else
             {
-                agent.destination = TroopRegistry.instance.GetRedSpawn().position;
+                if (team == Team.Blue)
+                {
+                    agent.destination = TroopRegistry.instance.GetRedSpawn().position;
+                }
+                else
+                {
+                    agent.destination = TroopRegistry.instance.GetBlueSpawn().position;
+                }
             }
         }
     }
@@ -257,8 +265,20 @@ public class Troop : MonoBehaviour
     /// <param name="t">the new team</param>
     public void SetTeam(Team t)
     {
+        Debug.Log(t);
         // TODO: Set the troop's clothes
         team = t;
+        foreach (MeshRenderer m in teamClothes)
+        {
+            if (t == Team.Red)
+            {
+                m.material = TroopRegistry.instance.GetRedClothes();
+            }
+            else
+            {
+                m.material = TroopRegistry.instance.GetBlueClothes();
+            }
+        }
     }
 
     public virtual float GetTargetDistance(bool rallied)

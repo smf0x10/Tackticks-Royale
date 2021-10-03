@@ -12,6 +12,8 @@ public class TroopRegistry : MonoBehaviour
 
     [SerializeField] private Transform blueSpawn;
     [SerializeField] private Transform redSpawn;
+    [SerializeField] private Material blueClothes;
+    [SerializeField] private Material redClothes;
 
     /// <summary>
     /// Returns the list of troop GameObjects
@@ -43,6 +45,16 @@ public class TroopRegistry : MonoBehaviour
     public Transform GetRedSpawn()
     {
         return redSpawn;
+    }
+
+    public Material GetBlueClothes()
+    {
+        return blueClothes;
+    }
+
+    public Material GetRedClothes()
+    {
+        return redClothes;
     }
 
     private void Awake()
