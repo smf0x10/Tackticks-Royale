@@ -14,7 +14,10 @@ thus far.
 Current plans:
 
 -Add an interface to streamline the development of new troop formations: done
--Add a "rally system" to select a group of troops and direct them to hold: working on it
-a certain point
+
+-Add a "rally system" to select a group of troops and direct them to hold
+a certain point: working on it
+
 -Add an objective to win the game: not started
+
 -Reimplement multiplayer: not started
