@@ -44,7 +44,7 @@ public class TroopFormation : ScriptableObject
         }
         else
         {
-            pos = TroopRegistry.instance.GetBlueSpawn().position;
+            pos = TroopRegistry.instance.GetRedSpawn().position;
             rot = TroopRegistry.instance.GetRedSpawn().rotation;
         }
 

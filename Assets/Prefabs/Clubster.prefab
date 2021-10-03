@@ -515,16 +515,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01a883ae64df7c419a45ee41aebb070, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 195562330671720566}
-  target: {fileID: 0}
-  targetObject: {fileID: 0}
-  hp: 10
   team: 0
-  range: 3
-  atk: 4
-  kb: 2000
-  atkDelay: 2
-  getUpDelay: 0.5
+  teamClothes:
+  - {fileID: 23642624551306466}
 --- !u!195 &195562330671720566
 NavMeshAgent:
   m_ObjectHideFlags: 0

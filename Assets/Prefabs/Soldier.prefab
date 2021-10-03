@@ -403,13 +403,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa01cdd1da0c09a42b0072bca1eff45e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 5
   team: 0
-  range: 2.5
-  atk: 2
-  kb: 300
-  atkDelay: 2
-  getUpDelay: 1
+  teamClothes:
+  - {fileID: 23345031812042366}
 --- !u!195 &195391342954140556
 NavMeshAgent:
   m_ObjectHideFlags: 0
