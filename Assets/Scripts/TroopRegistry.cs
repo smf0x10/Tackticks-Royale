@@ -14,6 +14,7 @@ public class TroopRegistry : MonoBehaviour
     [SerializeField] private Transform redSpawn;
     [SerializeField] private Material blueClothes;
     [SerializeField] private Material redClothes;
+    [SerializeField] private GameObject selectionIndicatorPrefab;
 
     /// <summary>
     /// Returns the list of troop GameObjects
@@ -27,6 +28,11 @@ public class TroopRegistry : MonoBehaviour
     public GameObject GetTroopPrefab(TroopType type)
     {
         return troops[(int)type];
+    }
+
+    public GameObject GetSelectionIndicatorPrefab()
+    {
+        return selectionIndicatorPrefab;
     }
 
     /// <summary>

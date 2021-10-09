@@ -42,6 +42,7 @@ public class Troop : MonoBehaviour
     private float timeToGetUp;
     private bool isRallied;
     private Vector3 rallyTarget;
+    private GameObject selectedIndicator;
 
     public static List<Troop> activeTroops = new List<Troop>();
     /// <summary>
@@ -141,6 +142,15 @@ public class Troop : MonoBehaviour
     public virtual float GetMoveSpeed()
     {
         return 1;
+    }
+
+    /// <summary>
+    /// The height for the indicator that this troop is selected to appear at
+    /// </summary>
+    /// <returns></returns>
+    public virtual float GetSelectionHeight()
+    {
+        return 2;
     }
 
     protected virtual void Update()
@@ -299,9 +309,22 @@ public class Troop : MonoBehaviour
     /// <param name="newTarget">The position to target</param>
     public void SetRallyTarget(Vector3 newTarget)
     {
-        // TODO: implementation
+        Deselect();
         rallyTarget = newTarget;
         isRallied = true;
         //Debug.Log(newTarget);
+    }
+
+    public void Select()
+    {
+        selectedIndicator = Instantiate(TroopRegistry.instance.GetSelectionIndicatorPrefab(), transform.position + new Vector3(0, GetSelectionHeight(), 0), transform.rotation, transform);
+    }
+
+    public void Deselect()
+    {
+        if (selectedIndicator != null)
+        {
+            Destroy(selectedIndicator);
+        }
     }
 }

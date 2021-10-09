@@ -6389,6 +6389,8 @@ MonoBehaviour:
   redSpawn: {fileID: 1109037048}
   blueClothes: {fileID: 2100000, guid: 66c8e924a78a3444b97f43fce68f3a65, type: 2}
   redClothes: {fileID: 2100000, guid: 1c8eb0aa31b16a2408c9ed82fa38f5c5, type: 2}
+  selectionIndicatorPrefab: {fileID: 8633407208244663358, guid: 2a0670638761cb346ac326122b7b249b,
+    type: 3}
 --- !u!4 &858341312
 Transform:
   m_ObjectHideFlags: 0
