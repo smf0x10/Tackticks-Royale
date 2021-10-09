@@ -12,6 +12,7 @@ public class SelectionBox : MonoBehaviour
         if (other.GetComponent<Troop>())
         {
             selected.Add(other.GetComponent<Troop>());
+            other.GetComponent<Troop>().Select();
         }
     }
 
@@ -20,6 +21,7 @@ public class SelectionBox : MonoBehaviour
         if (other.GetComponent<Troop>())
         {
             selected.Remove(other.GetComponent<Troop>());
+            other.GetComponent<Troop>().Deselect();
         }
     }
 
