@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\Troop Formations\FClubster.cs" />
     <Compile Include="Assets\Scripts\Troop Formations\FArchers.cs" />
     <Compile Include="Assets\Scripts\Troop Formations\FSoldiers.cs" />
+    <Compile Include="Assets\Scripts\Util\AnimationHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

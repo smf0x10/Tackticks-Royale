@@ -6391,6 +6391,8 @@ MonoBehaviour:
   redClothes: {fileID: 2100000, guid: 1c8eb0aa31b16a2408c9ed82fa38f5c5, type: 2}
   selectionIndicatorPrefab: {fileID: 8633407208244663358, guid: 2a0670638761cb346ac326122b7b249b,
     type: 3}
+  rallyPointPrefab: {fileID: 360452861620795800, guid: 3316119d040c7cb4194347a9a478a571,
+    type: 3}
 --- !u!4 &858341312
 Transform:
   m_ObjectHideFlags: 0
