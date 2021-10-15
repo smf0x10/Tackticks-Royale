@@ -150,14 +150,15 @@ public class SpawnManager: MonoBehaviour {
         if (!mouseDown && draggingSelection)
         {
             draggingSelection = false;
-            selectedTroops = currentSelection.GetComponent<SelectionBox>().GetSelection(); // This might cause a memory leak. Not sure.
+            selectedTroops = currentSelection.GetComponent<SelectionBox>().GetSelection();
             Destroy(currentSelection);
             return;
         }
-        if (selectedTroops != null)
+        if (selectedTroops != null && selectedTroops.Count > 0)
         {
             Physics.Raycast(cam.ScreenPointToRay(Mouse.current.position.ReadValue()), out RaycastHit hit, 500, 1, QueryTriggerInteraction.Ignore);
             SetSelectionTarget(hit.point);
+            Instantiate(TroopRegistry.instance.GetRallyPointPrefab(), hit.point, Quaternion.Euler(0, 0, 0));
             return;
         }
         if (mouseDown && !draggingSelection)
