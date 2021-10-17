@@ -157,8 +157,11 @@ public class SpawnManager: MonoBehaviour {
         if (selectedTroops != null && selectedTroops.Count > 0)
         {
             Physics.Raycast(cam.ScreenPointToRay(Mouse.current.position.ReadValue()), out RaycastHit hit, 500, 1, QueryTriggerInteraction.Ignore);
-            SetSelectionTarget(hit.point);
-            Instantiate(TroopRegistry.instance.GetRallyPointPrefab(), hit.point, Quaternion.Euler(0, 0, 0));
+            if (hit.collider != null && hit.normal.y > Mathf.Sqrt(3) / 3)
+            {
+                SetSelectionTarget(hit.point);
+                Instantiate(TroopRegistry.instance.GetRallyPointPrefab(), hit.point, Quaternion.Euler(0, 0, 0));
+            }
             return;
         }
         if (mouseDown && !draggingSelection)
@@ -189,6 +192,19 @@ public class SpawnManager: MonoBehaviour {
                 continue;
             }
             t.SetRallyTarget(pos);
+        }
+        selectedTroops = null;
+    }
+
+    private void RemoveSelectionTarget()
+    {
+        foreach (Troop t in selectedTroops)
+        {
+            if (t == null)
+            {
+                continue;
+            }
+            t.RemoveRallyTarget();
         }
         selectedTroops = null;
     }
