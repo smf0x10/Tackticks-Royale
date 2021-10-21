@@ -44,7 +44,7 @@ public class Troop : MonoBehaviour
     private Vector3 rallyTarget;
     private GameObject selectedIndicator;
 
-    public static List<Troop> activeTroops = new List<Troop>();
+    protected static List<Troop> activeTroops = new List<Troop>();
     /// <summary>
     /// The maximum distance from a potential target before a troop will not detect it
     /// </summary>
@@ -64,6 +64,33 @@ public class Troop : MonoBehaviour
             activeTroops.Remove(this);
             Destroy(gameObject);
         }
+    }
+
+    /// <summary>
+    /// Returns a list of all the troops in play, regardless of team
+    /// </summary>
+    /// <returns></returns>
+    public static List<Troop> GetActiveTroops()
+    {
+        return activeTroops;
+    }
+
+    /// <summary>
+    /// Returns a list of all the troops on the specified team
+    /// </summary>
+    /// <param name="t">The team to search for</param>
+    /// <returns></returns>
+    public static List<Troop> GetActiveTroops(Team t)
+    {
+        List<Troop> ret = new List<Troop>();
+        for (int i = 0; i < activeTroops.Count; i++)
+        {
+            if (activeTroops[i].GetTeam() == t)
+            {
+                ret.Add(activeTroops[i]);
+            }
+        }
+        return ret;
     }
 
     private void Awake()
@@ -275,7 +302,6 @@ public class Troop : MonoBehaviour
     /// <param name="t">the new team</param>
     public void SetTeam(Team t)
     {
-        Debug.Log(t);
         // TODO: Set the troop's clothes
         team = t;
         foreach (MeshRenderer m in teamClothes)
@@ -313,6 +339,15 @@ public class Troop : MonoBehaviour
         rallyTarget = newTarget;
         isRallied = true;
         //Debug.Log(newTarget);
+    }
+
+    /// <summary>
+    /// If this troop is targeting a rally point, makes it stop targeting the point and advance toward the portal
+    /// </summary>
+    public void RemoveRallyTarget()
+    {
+        Deselect();
+        isRallied = false;
     }
 
     public void Select()
