@@ -302,7 +302,6 @@ public class Troop : MonoBehaviour
     /// <param name="t">the new team</param>
     public void SetTeam(Team t)
     {
-        Debug.Log(t);
         // TODO: Set the troop's clothes
         team = t;
         foreach (MeshRenderer m in teamClothes)

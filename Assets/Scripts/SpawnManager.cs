@@ -19,6 +19,9 @@ public class SpawnManager: MonoBehaviour {
     [SerializeField] private Transform canvas;
     [SerializeField] private string[] formations;
 
+    [SerializeField] private GameObject selectionCommands;
+    [SerializeField] private UnityEngine.EventSystems.EventSystem eventSystem;
+
     // Rally troop selection
     [SerializeField] private Camera cam;
     [SerializeField] private GameObject selectionPrefab;
@@ -140,21 +143,21 @@ public class SpawnManager: MonoBehaviour {
     /// </summary>
     public void OnClick(InputAction.CallbackContext ctx)
     {
-        //Debug.Log(ctx);
         bool mouseWasDown = mouseDown;
         mouseDown = ctx.ReadValueAsButton();
-        if (mouseDown && mouseWasDown)
+        if (mouseDown && (mouseWasDown || eventSystem.IsPointerOverGameObject()))
         {
-            return; // To stop the event from triggering twice upon pressing the mouse
+            return; // To stop the event from triggering twice upon pressing the mouse or from clicking buttons
         }
-        if (!mouseDown && draggingSelection)
+        if (!mouseDown && draggingSelection) // stop selecting troops
         {
             draggingSelection = false;
             selectedTroops = currentSelection.GetComponent<SelectionBox>().GetSelection();
+            EnterSelectedMode();
             Destroy(currentSelection);
             return;
         }
-        if (selectedTroops != null && selectedTroops.Count > 0)
+        if (mouseDown && selectedTroops != null && selectedTroops.Count > 0) // set a rally point
         {
             Physics.Raycast(cam.ScreenPointToRay(Mouse.current.position.ReadValue()), out RaycastHit hit, 500, 1, QueryTriggerInteraction.Ignore);
             if (hit.collider != null && hit.normal.y > Mathf.Sqrt(3) / 3)
@@ -164,7 +167,7 @@ public class SpawnManager: MonoBehaviour {
             }
             return;
         }
-        if (mouseDown && !draggingSelection)
+        if (mouseDown && !draggingSelection) // Start selecting troops
         {
             RaycastHit[] thingsClicked = Physics.RaycastAll(cam.ScreenPointToRay(Mouse.current.position.ReadValue()), 500, 1, QueryTriggerInteraction.Ignore);
             for (int i = 0; i < thingsClicked.Length; i++)
@@ -177,6 +180,23 @@ public class SpawnManager: MonoBehaviour {
                 break;
             }
         }
+    }
+
+    /// <summary>
+    /// Shows the selection commands in the HUD
+    /// </summary>
+    private void EnterSelectedMode()
+    {
+        selectionCommands.SetActive(true);
+    }
+
+    /// <summary>
+    /// Sets the selected troop array to null and hides the selection command menu
+    /// </summary>
+    private void ExitSelectedMode()
+    {
+        selectedTroops = null;
+        selectionCommands.SetActive(false);
     }
 
     /// <summary>
@@ -193,11 +213,18 @@ public class SpawnManager: MonoBehaviour {
             }
             t.SetRallyTarget(pos);
         }
-        selectedTroops = null;
+        ExitSelectedMode();
     }
 
-    private void RemoveSelectionTarget()
+    /// <summary>
+    /// Makes all selected troops abandon their rally point and advance
+    /// </summary>
+    public void RemoveSelectionTarget()
     {
+        if (selectedTroops == null)
+        {
+            return;
+        }
         foreach (Troop t in selectedTroops)
         {
             if (t == null)
@@ -206,7 +233,27 @@ public class SpawnManager: MonoBehaviour {
             }
             t.RemoveRallyTarget();
         }
-        selectedTroops = null;
+        ExitSelectedMode();
+    }
+
+    /// <summary>
+    /// Deselects all the selected troops
+    /// </summary>
+    public void CancelSelection()
+    {
+        if (selectedTroops == null)
+        {
+            return;
+        }
+        foreach (Troop t in selectedTroops)
+        {
+            if (t == null)
+            {
+                continue;
+            }
+            t.Deselect();
+        }
+        ExitSelectedMode();
     }
 }
 
