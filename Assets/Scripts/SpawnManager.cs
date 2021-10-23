@@ -20,6 +20,7 @@ public class SpawnManager: MonoBehaviour {
     [SerializeField] private string[] formations;
 
     [SerializeField] private GameObject selectionCommands;
+    [SerializeField] private GameObject generalCommands;
     [SerializeField] private UnityEngine.EventSystems.EventSystem eventSystem;
 
     // Rally troop selection
@@ -33,7 +34,7 @@ public class SpawnManager: MonoBehaviour {
     private RaycastHit currentDrag;
 
     private List<Troop> selectedTroops;
-    public static float SE_FILL_SPEED = 0.1f;
+    public static float SE_FILL_SPEED = 1f;
 
 
     private void Awake()
@@ -90,7 +91,7 @@ public class SpawnManager: MonoBehaviour {
     {
         if (summonEnergy < 20f)
         {
-            summonEnergy += 0.1f * Time.deltaTime;
+            summonEnergy += SE_FILL_SPEED * Time.deltaTime;
         }
         if (draggingSelection)
         {
@@ -188,6 +189,7 @@ public class SpawnManager: MonoBehaviour {
     private void EnterSelectedMode()
     {
         selectionCommands.SetActive(true);
+        generalCommands.SetActive(false);
     }
 
     /// <summary>
@@ -197,6 +199,7 @@ public class SpawnManager: MonoBehaviour {
     {
         selectedTroops = null;
         selectionCommands.SetActive(false);
+        generalCommands.SetActive(true);
     }
 
     /// <summary>
@@ -254,6 +257,14 @@ public class SpawnManager: MonoBehaviour {
             t.Deselect();
         }
         ExitSelectedMode();
+    }
+
+    public void FullAdvance()
+    {
+        foreach(Troop t in Troop.GetActiveTroops(team))
+        {
+            t.RemoveRallyTarget();
+        }
     }
 }
 
