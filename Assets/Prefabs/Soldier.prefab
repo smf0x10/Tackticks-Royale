@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 33089055269357700}
   - component: {fileID: 23061328247879566}
   - component: {fileID: 135147593329054580}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Soldier-head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 33068804873903482}
   - component: {fileID: 23534360810601550}
   - component: {fileID: 136946942695066894}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Soldier-weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -203,7 +203,7 @@ GameObject:
   - component: {fileID: 33578125688351276}
   - component: {fileID: 23313855319118870}
   - component: {fileID: 136174836416868528}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Soldier-Rarm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -304,7 +304,7 @@ GameObject:
   - component: {fileID: 195391342954140556}
   - component: {fileID: 54179538286581450}
   - component: {fileID: 5970677444367077281}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Soldier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -475,7 +475,7 @@ GameObject:
   - component: {fileID: 33304005822307932}
   - component: {fileID: 23617941945314114}
   - component: {fileID: 136158190113719630}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Soldier-Larm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -568,7 +568,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7590555399723724046}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Larm pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -599,7 +599,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4833486798483812425}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Rarm pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}

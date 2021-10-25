@@ -36,6 +36,8 @@ public class SpawnManager: MonoBehaviour {
     private List<Troop> selectedTroops;
     public static float SE_FILL_SPEED = 1f;
 
+    private const int NO_TROOP_COLLISIONS = ~(1 << 9); // Pass into the layermask parameter of a raycast to ignore troops
+
 
     private void Awake()
     {
@@ -95,8 +97,7 @@ public class SpawnManager: MonoBehaviour {
         }
         if (draggingSelection)
         {
-
-            if (Physics.Raycast(cam.ScreenPointToRay(Mouse.current.position.ReadValue()), out currentDrag, 500, 1, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(cam.ScreenPointToRay(Mouse.current.position.ReadValue()), out currentDrag, 500, NO_TROOP_COLLISIONS, QueryTriggerInteraction.Ignore))
             {
                 currentSelection.transform.localScale = new Vector3(Mathf.Abs(draggingOrigin.x - currentDrag.point.x), Mathf.Abs(draggingOrigin.y - currentDrag.point.y) + 1, Mathf.Abs(draggingOrigin.z - currentDrag.point.z));
                 currentSelection.transform.position = (draggingOrigin + currentDrag.point) / 2;
@@ -154,32 +155,34 @@ public class SpawnManager: MonoBehaviour {
         {
             draggingSelection = false;
             selectedTroops = currentSelection.GetComponent<SelectionBox>().GetSelection();
-            EnterSelectedMode();
+            if (selectedTroops.Count > 0)
+            {
+                EnterSelectedMode();
+            }
             Destroy(currentSelection);
             return;
         }
         if (mouseDown && selectedTroops != null && selectedTroops.Count > 0) // set a rally point
         {
-            Physics.Raycast(cam.ScreenPointToRay(Mouse.current.position.ReadValue()), out RaycastHit hit, 500, 1, QueryTriggerInteraction.Ignore);
-            if (hit.collider != null && hit.normal.y > Mathf.Sqrt(3) / 3)
+            Physics.Raycast(cam.ScreenPointToRay(Mouse.current.position.ReadValue()), out RaycastHit hit, 500, NO_TROOP_COLLISIONS, QueryTriggerInteraction.Collide);
+            if (hit.collider.GetComponentInParent<RallyPoint>())
             {
-                SetSelectionTarget(hit.point);
-                Instantiate(TroopRegistry.instance.GetRallyPointPrefab(), hit.point, Quaternion.Euler(0, 0, 0));
+                RallyPoint r = hit.collider.GetComponentInParent<RallyPoint>();
+                SetSelectionTarget(r);
+            }
+            else if (hit.collider != null && hit.normal.y > Mathf.Sqrt(3) / 3)
+            {
+                RallyPoint r = Instantiate(TroopRegistry.instance.GetRallyPointPrefab(), hit.point, Quaternion.Euler(0, 0, 0)).GetComponent<RallyPoint>();
+                SetSelectionTarget(r);
             }
             return;
         }
         if (mouseDown && !draggingSelection) // Start selecting troops
         {
-            RaycastHit[] thingsClicked = Physics.RaycastAll(cam.ScreenPointToRay(Mouse.current.position.ReadValue()), 500, 1, QueryTriggerInteraction.Ignore);
-            for (int i = 0; i < thingsClicked.Length; i++)
-            {
-                if (thingsClicked[i].collider.GetComponent<Troop>())
-                    continue;
-                currentSelection = Instantiate(selectionPrefab, thingsClicked[i].point, new Quaternion(0, 0, 0, 0));
-                draggingOrigin = thingsClicked[i].point;
-                draggingSelection = true;
-                break;
-            }
+            Physics.Raycast(cam.ScreenPointToRay(Mouse.current.position.ReadValue()), out RaycastHit hit, 500, NO_TROOP_COLLISIONS, QueryTriggerInteraction.Ignore);
+            currentSelection = Instantiate(selectionPrefab, hit.point, new Quaternion(0, 0, 0, 0));
+            draggingOrigin = hit.point;
+            draggingSelection = true;
         }
     }
 
@@ -206,7 +209,7 @@ public class SpawnManager: MonoBehaviour {
     /// Sets the selected troops to target a position
     /// </summary>
     /// <param name="pos">The position to target</param>
-    private void SetSelectionTarget(Vector3 pos)
+    private void SetSelectionTarget(RallyPoint target)
     {
         foreach(Troop t in selectedTroops)
         {
@@ -214,7 +217,7 @@ public class SpawnManager: MonoBehaviour {
             {
                 continue;
             }
-            t.SetRallyTarget(pos);
+            t.SetRallyTarget(target);
         }
         ExitSelectedMode();
     }

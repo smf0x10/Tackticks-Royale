@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 33485149010165276}
   - component: {fileID: 23260748993525062}
   - component: {fileID: 136528763224436330}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Clubster-weapon1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 33511654646954616}
   - component: {fileID: 23214463878815634}
   - component: {fileID: 135901339397083226}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Clubster-head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -203,7 +203,7 @@ GameObject:
   - component: {fileID: 33973814160879576}
   - component: {fileID: 23441167277564904}
   - component: {fileID: 136889789537863614}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Clubster-Larm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -299,7 +299,7 @@ GameObject:
   - component: {fileID: 33384790216502798}
   - component: {fileID: 23265579624625086}
   - component: {fileID: 136327156453896550}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Clubster-Rarm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -399,7 +399,7 @@ GameObject:
   - component: {fileID: 114942834431722900}
   - component: {fileID: 195562330671720566}
   - component: {fileID: 4610378018419911316}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Clubster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -571,7 +571,7 @@ GameObject:
   - component: {fileID: 33587163564779856}
   - component: {fileID: 23999857334933308}
   - component: {fileID: 136734666975446208}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -664,7 +664,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8447284091334696127}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: weapon pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
