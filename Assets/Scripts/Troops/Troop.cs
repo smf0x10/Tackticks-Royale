@@ -41,7 +41,7 @@ public class Troop : MonoBehaviour
     private Rigidbody rb;
     private float timeToGetUp;
     private bool isRallied;
-    private Vector3 rallyTarget;
+    private RallyPoint rallyTarget;
     private GameObject selectedIndicator;
 
     protected static List<Troop> activeTroops = new List<Troop>();
@@ -62,6 +62,10 @@ public class Troop : MonoBehaviour
         if (hp <= 0 || transform.position.y < DEATH_HEIGHT)
         {
             activeTroops.Remove(this);
+            if (isRallied)
+            {
+                rallyTarget.RemoveTroopTarget();
+            }
             Destroy(gameObject);
         }
     }
@@ -233,7 +237,7 @@ public class Troop : MonoBehaviour
             agent.isStopped = false;
             if (isRallied)
             {
-                agent.destination = rallyTarget;
+                agent.destination = rallyTarget.transform.position;
             }
             else
             {
@@ -332,11 +336,16 @@ public class Troop : MonoBehaviour
     /// <summary>
     /// Sets this troop to target the specified point
     /// </summary>
-    /// <param name="newTarget">The position to target</param>
-    public void SetRallyTarget(Vector3 newTarget)
+    /// <param name="newTarget">The rally point to target (must be instantiated before this function is run</param>
+    public void SetRallyTarget(RallyPoint newTarget)
     {
         Deselect();
+        if (isRallied)
+        {
+            rallyTarget.RemoveTroopTarget();
+        }
         rallyTarget = newTarget;
+        rallyTarget.AddTroopTarget();
         isRallied = true;
         //Debug.Log(newTarget);
     }
@@ -347,6 +356,10 @@ public class Troop : MonoBehaviour
     public void RemoveRallyTarget()
     {
         Deselect();
+        if (isRallied)
+        {
+            rallyTarget.RemoveTroopTarget();
+        }
         isRallied = false;
     }
 
