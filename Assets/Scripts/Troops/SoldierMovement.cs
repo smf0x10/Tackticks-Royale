@@ -17,17 +17,17 @@ public class SoldierMovement : Troop {
 
     public override float GetAtkDelay()
     {
-        return 2;
+        return 1.5f;
     }
 
     public override float GetKnockback()
     {
-        return 300;
+        return 250;
     }
 
     public override float GetAtkRange()
     {
-        return 2.5f;
+        return 2.4f;
     }
 
     public override float GetGetUpDelay()
@@ -38,5 +38,10 @@ public class SoldierMovement : Troop {
     public override float GetMoveSpeed()
     {
         return 2.5f;
+    }
+
+    public override float GetKnockbackThreshold()
+    {
+        return 350;
     }
 }

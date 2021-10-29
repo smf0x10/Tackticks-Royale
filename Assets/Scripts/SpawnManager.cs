@@ -181,6 +181,7 @@ public class SpawnManager: MonoBehaviour {
         {
             Physics.Raycast(cam.ScreenPointToRay(Mouse.current.position.ReadValue()), out RaycastHit hit, 500, NO_TROOP_COLLISIONS, QueryTriggerInteraction.Ignore);
             currentSelection = Instantiate(selectionPrefab, hit.point, new Quaternion(0, 0, 0, 0));
+            currentSelection.GetComponent<SelectionBox>().SetTeam(team);
             draggingOrigin = hit.point;
             draggingSelection = true;
         }

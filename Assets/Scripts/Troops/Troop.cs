@@ -15,27 +15,7 @@ public class Troop : MonoBehaviour
     protected int hp;
     [SerializeField] protected Team team;
     [SerializeField] private MeshRenderer[] teamClothes; // Mesh renderers to change color depending on the team
-    ///// <summary>
-    ///// The range at which this troop can attack. 
-    ///// There is currently no projectile logic in place, so ranged units just have this set higher than normal
-    ///// </summary>
-    //[SerializeField] protected float range;
-    ///// <summary>
-    ///// The number of hit points an attack from this troop deals
-    ///// </summary>
-    //[SerializeField] protected int atk;
-    ///// <summary>
-    ///// The knockback of this troop's attack
-    ///// </summary>
-    //[SerializeField] protected float kb;
-    ///// <summary>
-    ///// The delay between attacks, in seconds
-    ///// </summary>
-    //[SerializeField] protected float atkDelay;
-    ///// <summary>
-    ///// The amount of time this troop must be lying on the ground before it can get up
-    ///// </summary>
-    //[SerializeField] protected float getUpDelay;
+    private float knockbackToNextTopple;
     private Animator animator;
     private NavMeshAgent agent;
     private Rigidbody rb;
@@ -106,6 +86,7 @@ public class Troop : MonoBehaviour
         atkTime = GetAtkDelay();
         hp = GetMaxHp();
         agent.speed = GetMoveSpeed();
+        knockbackToNextTopple = GetKnockbackThreshold();
         Init();
     }
 
@@ -173,6 +154,17 @@ public class Troop : MonoBehaviour
     public virtual float GetMoveSpeed()
     {
         return 1;
+    }
+
+    /// <summary>
+    /// The total amount of knockback that must be received before this troop starts being affected by physics.
+    /// If an attack deals less knockback than this threshold, the amount of attempted knockback taken will be stored and used to reduce the threshold for the next attack.
+    /// If 0, the troop will always fall over when recieving knockback
+    /// </summary>
+    /// <returns></returns>
+    public virtual float GetKnockbackThreshold()
+    {
+        return 0;
     }
 
     /// <summary>
@@ -275,10 +267,15 @@ public class Troop : MonoBehaviour
         hp -= pwr;
         if (takeKB)
         {
-            rb.isKinematic = false;
-            agent.enabled = false;
-            timeToGetUp = GetGetUpDelay();
-            rb.AddExplosionForce(kbPwr, attacker.transform.position, GetAtkRange() * 2, 4);
+            knockbackToNextTopple -= kbPwr;
+            if (knockbackToNextTopple <= 0)
+            {
+                rb.isKinematic = false;
+                agent.enabled = false;
+                timeToGetUp = GetGetUpDelay();
+                rb.AddExplosionForce(kbPwr, attacker.transform.position, GetAtkRange() * 2, 4);
+                knockbackToNextTopple = GetKnockbackThreshold();
+            }
         }
     }
 

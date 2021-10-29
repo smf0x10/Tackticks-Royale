@@ -14,7 +14,7 @@ public class ClubsterMovement : Troop
 
     public override float GetAtkDelay()
     {
-        return 3;
+        return 2;
     }
 
     public override float GetKnockback()
@@ -24,7 +24,7 @@ public class ClubsterMovement : Troop
 
     public override float GetAtkRange()
     {
-        return 2.8f;
+        return 2.7f;
     }
 
     public override float GetGetUpDelay()
@@ -35,6 +35,11 @@ public class ClubsterMovement : Troop
     public override float GetMoveSpeed()
     {
         return 1.5f;
+    }
+
+    public override float GetKnockbackThreshold()
+    {
+        return 1000;
     }
 
     protected override void Attack(Troop atkTarget)

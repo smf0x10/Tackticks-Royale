@@ -6,10 +6,20 @@ public class SelectionBox : MonoBehaviour
 {
 
     [SerializeField] private List<Troop> selected = new List<Troop>();
+    private Team team;
+
+    /// <summary>
+    /// Sets the team of this box. It will only select troops from its team
+    /// </summary>
+    /// <param name="t"></param>
+    public void SetTeam(Team t)
+    {
+        team = t;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<Troop>())
+        if (other.GetComponent<Troop>() && other.GetComponent<Troop>().GetTeam() == team)
         {
             selected.Add(other.GetComponent<Troop>());
             other.GetComponent<Troop>().Select();
@@ -18,7 +28,7 @@ public class SelectionBox : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<Troop>())
+        if (other.GetComponent<Troop>() && other.GetComponent<Troop>().GetTeam() == team)
         {
             selected.Remove(other.GetComponent<Troop>());
             other.GetComponent<Troop>().Deselect();
