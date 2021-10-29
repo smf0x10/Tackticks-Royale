@@ -13,7 +13,7 @@ public class ArcherMovement : Troop
 
     public override float GetAtkDelay()
     {
-        return 2;
+        return 1;
     }
 
     public override float GetKnockback()
@@ -34,5 +34,10 @@ public class ArcherMovement : Troop
     public override float GetMoveSpeed()
     {
         return 2;
+    }
+
+    public override float GetKnockbackThreshold()
+    {
+        return 10;
     }
 }

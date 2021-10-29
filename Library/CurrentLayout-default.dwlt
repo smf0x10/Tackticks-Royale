@@ -19,9 +19,9 @@ MonoBehaviour:
     width: 1920
     height: 997
   m_ShowMode: 4
-  m_Title: Scene
+  m_Title: Game
   m_RootView: {fileID: 2}
-  m_MinSize: {x: 875, y: 542}
+  m_MinSize: {x: 875, y: 521}
   m_MaxSize: {x: 10000, y: 10000}
   m_Maximized: 1
 --- !u!114 &2
@@ -46,7 +46,7 @@ MonoBehaviour:
     y: 0
     width: 1920
     height: 997
-  m_MinSize: {x: 875, y: 542}
+  m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
   m_UseTopView: 1
   m_TopViewHeight: 30
@@ -99,10 +99,10 @@ MonoBehaviour:
     y: 30
     width: 1920
     height: 947
-  m_MinSize: {x: 708, y: 492}
-  m_MaxSize: {x: 18003, y: 14042}
+  m_MinSize: {x: 709, y: 471}
+  m_MaxSize: {x: 18004, y: 14021}
   vertical: 0
-  controlID: 45
+  controlID: 131
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -173,10 +173,10 @@ MonoBehaviour:
     y: 0
     width: 512
     height: 947
-  m_MinSize: {x: 232, y: 492}
-  m_MaxSize: {x: 10002, y: 14042}
+  m_MinSize: {x: 232, y: 471}
+  m_MaxSize: {x: 10002, y: 14021}
   vertical: 1
-  controlID: 93
+  controlID: 41
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -196,8 +196,8 @@ MonoBehaviour:
     y: 0
     width: 387
     height: 947
-  m_MinSize: {x: 275, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 276, y: 71}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 13}
   m_Panes:
   - {fileID: 13}
@@ -223,8 +223,8 @@ MonoBehaviour:
     y: 0
     width: 512
     height: 418
-  m_MinSize: {x: 202, y: 221}
-  m_MaxSize: {x: 4002, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
@@ -475,12 +475,12 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Prefabs
+    - Assets/Scripts/Troops
     m_Globs: []
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Prefabs
+  - Assets/Scripts/Troops
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\smfwi\Desktop\smfwii-takticks-royale-_local-4\Takticks
     Royale
@@ -488,9 +488,9 @@ MonoBehaviour:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: f03f0000
-    m_LastClickedID: 16368
-    m_ExpandedIDs: 00000000e23f0000e43f0000ec3f000000ca9a3b
+    m_SelectedIDs: 5a400000
+    m_LastClickedID: 16474
+    m_ExpandedIDs: 00000000ee3f0000f03f00000040000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -518,7 +518,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000e23f0000e43f0000
+    m_ExpandedIDs: 00000000ee3f0000f03f0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -701,9 +701,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 9.086275, y: 1.1214218, z: 5.103636}
+    m_Target: {x: 6.8504467, y: -3.9886398, z: 13.983337}
     speed: 2
-    m_Value: {x: 9.086275, y: 1.1214218, z: 5.103636}
+    m_Value: {x: 6.8504467, y: -3.9886398, z: 13.983337}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -750,13 +750,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.18074875, y: -0.48970443, z: 0.104472116, w: -0.84658873}
+    m_Target: {x: -0.28408435, y: -0.2666846, z: 0.08252576, w: -0.9173227}
     speed: 2
-    m_Value: {x: -0.18089552, y: -0.48840773, z: 0.104195274, w: -0.8472768}
+    m_Value: {x: -0.2840679, y: -0.26666915, z: 0.08252098, w: -0.9172695}
   m_Size:
-    m_Target: 19.736856
+    m_Target: 28.067795
     speed: 2
-    m_Value: 14.642432
+    m_Value: 28.067795
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -810,8 +810,8 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
-      m_LastClickedID: 0
+      m_SelectedIDs: 7e3d0000
+      m_LastClickedID: 15742
       m_ExpandedIDs: 58fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
