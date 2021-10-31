@@ -9,7 +9,6 @@ using UnityEngine.AI;
 public class Troop : MonoBehaviour
 {
     private Transform target;
-    private GameObject targetObject;
     private float lastDist;
     private float atkTime;
     protected int hp;
@@ -202,7 +201,6 @@ public class Troop : MonoBehaviour
             if (Vector3.Distance(activeTroops[i].transform.position, transform.position) < lastDist)
             {
                 target = activeTroops[i].transform;
-                targetObject = activeTroops[i].gameObject;
                 lastDist = Vector3.Distance(activeTroops[i].transform.position, transform.position);
             }
         }
@@ -211,7 +209,7 @@ public class Troop : MonoBehaviour
             if (agent.enabled)
             {
                 agent.destination = target.position;
-                if (Vector3.Distance(transform.position, targetObject.transform.position) <= GetAtkRange())
+                if (IsInRange(target))
                 {
                     agent.isStopped = true;
                     // Random delay added for attacks to stop troops that execute their script first from always having priority
@@ -243,6 +241,16 @@ public class Troop : MonoBehaviour
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Checks if another troop is close enough for this troop to attack
+    /// </summary>
+    /// <param name="other">The troop to check</param>
+    /// <returns></returns>
+    protected virtual bool IsInRange(Transform other)
+    {
+        return Vector3.Distance(transform.position, other.position) <= GetAtkRange();
     }
 
     /// <summary>

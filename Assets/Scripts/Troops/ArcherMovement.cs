@@ -1,5 +1,5 @@
 ﻿
-public class ArcherMovement : Troop
+public class ArcherMovement : ProjectileTroop
 {
     public override int GetMaxHp()
     {
