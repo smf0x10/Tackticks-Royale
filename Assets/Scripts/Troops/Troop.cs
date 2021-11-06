@@ -19,7 +19,7 @@ public class Troop : MonoBehaviour
     private NavMeshAgent agent;
     private Rigidbody rb;
     private float timeToGetUp;
-    private bool isRallied;
+    protected bool isRallied;
     private RallyPoint rallyTarget;
     private GameObject selectedIndicator;
 
@@ -193,7 +193,7 @@ public class Troop : MonoBehaviour
 
     private void ChooseTarget()
     {
-        lastDist = GetTargetDistance(isRallied);
+        lastDist = int.MaxValue;
         for (int i = 0; i < activeTroops.Count; i++)
         {
             if (activeTroops[i].GetTeam() == team)
@@ -204,7 +204,7 @@ public class Troop : MonoBehaviour
                 lastDist = Vector3.Distance(activeTroops[i].transform.position, transform.position);
             }
         }
-        if (lastDist < GetTargetDistance(isRallied))
+        if (target != null && CanTarget(target))
         {
             if (agent.enabled)
             {
@@ -251,6 +251,16 @@ public class Troop : MonoBehaviour
     protected virtual bool IsInRange(Transform other)
     {
         return Vector3.Distance(transform.position, other.position) <= GetAtkRange();
+    }
+
+    /// <summary>
+    /// Checks if this troop can target something, given its transform information
+    /// </summary>
+    /// <param name="other">The transform belonging to the potential target</param>
+    /// <returns></returns>
+    protected virtual bool CanTarget(Transform other)
+    {
+        return Vector3.Distance(transform.position, other.position) < GetTargetDistance(isRallied);
     }
 
     /// <summary>
