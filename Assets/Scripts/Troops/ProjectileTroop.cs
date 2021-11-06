@@ -26,6 +26,16 @@ public class ProjectileTroop : Troop
         return ProjectileRegistry.GetProjectilePrefab(ProjectileType.ARROW);
     }
 
+    protected override bool CanTarget(Transform other)
+    {
+        if (other.position.y >= transform.position.y)
+        {
+            return base.CanTarget(other);
+        }
+        float heightAdvantage = transform.position.y - other.transform.position.y;
+        return Vector3.Distance(transform.position, other.position) <= Mathf.Sqrt(Mathf.Pow(GetTargetDistance(isRallied) + heightAdvantage, 2) + Mathf.Pow(heightAdvantage, 2));
+    }
+
     protected override bool IsInRange(Transform other)
     {
         if (other.position.y > transform.position.y)
@@ -33,7 +43,7 @@ public class ProjectileTroop : Troop
             return base.IsInRange(other);
         }
         float heightAdvantage = transform.position.y - other.transform.position.y;
-        return Vector3.Distance(transform.position, other.position) <= Mathf.Sqrt(Mathf.Pow(GetAtkRange(), 2) + Mathf.Pow(heightAdvantage, 2));
+        return Vector3.Distance(transform.position, other.position) <= Mathf.Sqrt(Mathf.Pow(GetAtkRange() + heightAdvantage, 2) + Mathf.Pow(heightAdvantage, 2));
     }
 
 }
