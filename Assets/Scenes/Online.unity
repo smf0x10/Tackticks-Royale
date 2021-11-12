@@ -7144,6 +7144,8 @@ MonoBehaviour:
     type: 3}
   rallyPointPrefab: {fileID: 360452861620795800, guid: 3316119d040c7cb4194347a9a478a571,
     type: 3}
+  deathParticle: {fileID: 8584472350773516771, guid: c4a3173d0465a9f40a32c9f19b85dc4e,
+    type: 3}
 --- !u!4 &858341312
 Transform:
   m_ObjectHideFlags: 0

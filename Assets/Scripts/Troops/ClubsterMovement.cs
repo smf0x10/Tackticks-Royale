@@ -48,7 +48,7 @@ public class ClubsterMovement : Troop
 
         foreach (Troop t in activeTroops)
         {
-            if (t.GetTeam() != team && t != atkTarget && Vector3.Distance(transform.position, t.transform.position) <= GetAtkRange() + 0.5f)
+            if (t.GetTeam() != GetTeam() && t != atkTarget && Vector3.Distance(transform.position, t.transform.position) <= GetAtkRange() + 0.5f)
             {
                 t.TakeDamage(this, GetAtk() - 1, true, GetKnockback());
             }

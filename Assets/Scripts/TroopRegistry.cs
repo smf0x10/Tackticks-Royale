@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// A centralized registry where troop types are matched to the actual troop that spawns
@@ -16,6 +15,7 @@ public class TroopRegistry : MonoBehaviour
     [SerializeField] private Material redClothes;
     [SerializeField] private GameObject selectionIndicatorPrefab;
     [SerializeField] private GameObject rallyPointPrefab;
+    [SerializeField] private GameObject deathParticle;
 
     /// <summary>
     /// Returns the list of troop GameObjects
@@ -67,6 +67,15 @@ public class TroopRegistry : MonoBehaviour
     public Material GetRedClothes()
     {
         return redClothes;
+    }
+
+    /// <summary>
+    /// Returns the prefab for the particle effect used when troops die
+    /// </summary>
+    /// <returns></returns>
+    public GameObject GetDeathParticle()
+    {
+        return deathParticle;
     }
 
     private void Awake()
