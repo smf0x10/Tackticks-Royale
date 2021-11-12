@@ -12,22 +12,18 @@ public class Troop : MonoBehaviour
     private float lastDist;
     private float atkTime;
     protected int hp;
-    [SerializeField] protected Team team;
+    [SerializeField] private Team team;
     [SerializeField] private MeshRenderer[] teamClothes; // Mesh renderers to change color depending on the team
     private float knockbackToNextTopple;
     private Animator animator;
     private NavMeshAgent agent;
     private Rigidbody rb;
     private float timeToGetUp;
-    protected bool isRallied;
+    protected bool IsRallied { get; set; }
     private RallyPoint rallyTarget;
     private GameObject selectedIndicator;
 
     protected static List<Troop> activeTroops = new List<Troop>();
-    /// <summary>
-    /// The maximum distance from a potential target before a troop will not detect it
-    /// </summary>
-    public const float MAX_TARGET_DISTANCE = 9999f;
     /// <summary>
     /// Troops die when they fall below this y coordinate
     /// </summary>
@@ -41,10 +37,11 @@ public class Troop : MonoBehaviour
         if (hp <= 0 || transform.position.y < DEATH_HEIGHT)
         {
             activeTroops.Remove(this);
-            if (isRallied)
+            if (IsRallied)
             {
                 rallyTarget.RemoveTroopTarget();
             }
+            Instantiate(TroopRegistry.instance.GetDeathParticle(), transform.position, transform.rotation);
             Destroy(gameObject);
         }
     }
@@ -225,7 +222,7 @@ public class Troop : MonoBehaviour
         else if (agent.enabled)
         {
             agent.isStopped = false;
-            if (isRallied)
+            if (IsRallied)
             {
                 agent.destination = rallyTarget.transform.position;
             }
@@ -260,7 +257,7 @@ public class Troop : MonoBehaviour
     /// <returns></returns>
     protected virtual bool CanTarget(Transform other)
     {
-        return Vector3.Distance(transform.position, other.position) < GetTargetDistance(isRallied);
+        return Vector3.Distance(transform.position, other.position) < GetTargetDistance(IsRallied);
     }
 
     /// <summary>
@@ -355,13 +352,13 @@ public class Troop : MonoBehaviour
     public void SetRallyTarget(RallyPoint newTarget)
     {
         Deselect();
-        if (isRallied)
+        if (IsRallied)
         {
             rallyTarget.RemoveTroopTarget();
         }
         rallyTarget = newTarget;
         rallyTarget.AddTroopTarget();
-        isRallied = true;
+        IsRallied = true;
         //Debug.Log(newTarget);
     }
 
@@ -371,11 +368,11 @@ public class Troop : MonoBehaviour
     public void RemoveRallyTarget()
     {
         Deselect();
-        if (isRallied)
+        if (IsRallied)
         {
             rallyTarget.RemoveTroopTarget();
         }
-        isRallied = false;
+        IsRallied = false;
     }
 
     public void Select()
