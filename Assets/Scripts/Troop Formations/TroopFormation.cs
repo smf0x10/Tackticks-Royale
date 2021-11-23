@@ -4,7 +4,6 @@ using UnityEngine;
 /// <summary>
 /// Class representing a troop formation. One subclass of this is instantiated for each spawn button on the HUD. Subclasses of this class are named starting with an F
 /// example: FSoldiers
-/// TODO: Actually make it do this
 /// </summary>
 public class TroopFormation : ScriptableObject
 {
@@ -33,7 +32,8 @@ public class TroopFormation : ScriptableObject
     /// </summary>
     /// <param name="troop">The troop to spawn</param>
     /// <param name="team">The side the troop is on</param>
-    protected static void SpawnTroop(TroopType troopType, Team team)
+    /// <returns>A reference to the instantiated troop</returns>
+    protected static Troop SpawnTroop(TroopType troopType, Team team)
     {
         Vector3 pos;
         Quaternion rot;
@@ -51,8 +51,7 @@ public class TroopFormation : ScriptableObject
         GameObject newTroop = Instantiate(TroopRegistry.instance.GetTroopPrefab(troopType), pos, rot);
 
         newTroop.GetComponent<Troop>().SetTeam(team);
-        // TODO: Set clothes color properly as well
-        //throw new NotImplementedException();
+        return newTroop.GetComponent<Troop>();
     }
 
     /// <summary>

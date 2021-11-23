@@ -36,12 +36,19 @@ public class SpawnManager: MonoBehaviour {
     private List<Troop> selectedTroops;
     public static float SE_FILL_SPEED = 1f;
 
+    private King king;
+
     private const int NO_TROOP_COLLISIONS = ~(1 << 9); // Pass into the layermask parameter of a raycast to ignore troops
 
 
     private void Awake()
     {
         cameraMovement.SetTeam(team);
+
+        FKing kingForm = ScriptableObject.CreateInstance<FKing>();
+        kingForm.TrySpawnFormation(this);
+        king = kingForm.GetLastTroopSpawned();
+        Debug.Log(king);
 
         summonEnergy = 5;
         for (int i = 0; i < formations.Length; i++)

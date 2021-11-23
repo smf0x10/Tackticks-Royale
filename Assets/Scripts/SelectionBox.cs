@@ -41,6 +41,7 @@ public class SelectionBox : MonoBehaviour
     /// <returns>A list containing the troop components currently in this selection box</returns>
     public List<Troop> GetSelection()
     {
+        Debug.Log(selected.Count);
         return selected;
     }
 }

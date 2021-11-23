@@ -91,5 +91,6 @@ public enum TroopType
 {
     SOLDIER,
     ARCHER,
-    CLUBSTER
+    CLUBSTER,
+    KING
 }
