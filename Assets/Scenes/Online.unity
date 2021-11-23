@@ -7136,6 +7136,7 @@ MonoBehaviour:
   - {fileID: 1815987080226422, guid: 3faa59d7c547dbc4da4c15806a37bec8, type: 3}
   - {fileID: 1684771161527614, guid: 29ee0d541d795ef4c89fe5d7b1418e21, type: 3}
   - {fileID: 1701291641766682, guid: c173d06ed7b7f9b43934e06f986baf58, type: 3}
+  - {fileID: 6523850076642899667, guid: 26f01cd8b12b9dc49b9efa7afca8b2c9, type: 3}
   blueSpawn: {fileID: 668160316}
   redSpawn: {fileID: 1109037048}
   blueClothes: {fileID: 2100000, guid: 66c8e924a78a3444b97f43fce68f3a65, type: 2}

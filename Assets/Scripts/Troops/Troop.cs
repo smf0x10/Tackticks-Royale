@@ -257,7 +257,8 @@ public class Troop : MonoBehaviour
     /// <returns></returns>
     protected virtual bool CanTarget(Transform other)
     {
-        return Vector3.Distance(transform.position, other.position) < GetTargetDistance(IsRallied);
+        return Vector3.Distance(transform.position, other.position) < GetTargetDistance(IsRallied) || 
+            (IsRallied && Vector3.Distance(rallyTarget.transform.position, other.position) < GetRallyDefendDistance());
     }
 
     /// <summary>
@@ -337,13 +338,20 @@ public class Troop : MonoBehaviour
     {
         if (rallied)
         {
-            return 4;
+            return 2;
         }
         else
         {
             return 8;
         }
     }
+
+    public virtual float GetRallyDefendDistance()
+    {
+        return 8;
+    }
+
+
 
     /// <summary>
     /// Sets this troop to target the specified point
@@ -354,6 +362,10 @@ public class Troop : MonoBehaviour
         Deselect();
         if (IsRallied)
         {
+            if (newTarget == rallyTarget)
+            {
+                return; // Already targeting this point
+            }
             rallyTarget.RemoveTroopTarget();
         }
         rallyTarget = newTarget;
@@ -386,5 +398,13 @@ public class Troop : MonoBehaviour
         {
             Destroy(selectedIndicator);
         }
+    }
+
+    /// <summary>
+    /// Run every frame while this troop is in its king's area of effect
+    /// </summary>
+    public virtual void UpdateWhileKingBuffed()
+    {
+
     }
 }

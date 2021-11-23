@@ -66,13 +66,15 @@
     <Compile Include="Assets\Scripts\Troops\Troop.cs" />
     <Compile Include="Assets\Scripts\Troop Formations\TroopFormation.cs" />
     <Compile Include="Assets\Scripts\p1SEBarRender.cs" />
+    <Compile Include="Assets\Scripts\Troops\ProjectileTroop.cs" />
+    <Compile Include="Assets\Scripts\ProjectileRegistry.cs" />
     <Compile Include="Assets\Scripts\Troops\ClubsterMovement.cs" />
     <Compile Include="Assets\Scripts\Troop Formations\FClubster.cs" />
     <Compile Include="Assets\Scripts\Troop Formations\FArchers.cs" />
     <Compile Include="Assets\Scripts\Troop Formations\FSoldiers.cs" />
     <Compile Include="Assets\Scripts\Util\AnimationHelper.cs" />
-    <Compile Include="Assets\Scripts\Troops\ProjectileTroop.cs" />
-    <Compile Include="Assets\Scripts\ProjectileRegistry.cs" />
+    <Compile Include="Assets\Scripts\Troops\King.cs" />
+    <Compile Include="Assets\Scripts\Troop Formations\FKing.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
