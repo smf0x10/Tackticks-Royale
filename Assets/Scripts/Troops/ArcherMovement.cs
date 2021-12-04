@@ -1,6 +1,8 @@
 ﻿
 public class ArcherMovement : ProjectileTroop
 {
+    private float knockbackBonus;
+    private float knockbackThresholdBonus;
     public override int GetMaxHp()
     {
         return 3;
@@ -18,7 +20,7 @@ public class ArcherMovement : ProjectileTroop
 
     public override float GetKnockback()
     {
-        return 30;
+        return 30 + knockbackBonus;
     }
 
     public override float GetAtkRange()
@@ -38,6 +40,18 @@ public class ArcherMovement : ProjectileTroop
 
     public override float GetKnockbackThreshold()
     {
-        return 10;
+        return 10 + knockbackThresholdBonus;
+    }
+
+    public override void GainKingBuff()
+    {
+        knockbackBonus = 30;
+        knockbackThresholdBonus = 30;
+    }
+
+    public override void LoseKingBuff()
+    {
+        knockbackThresholdBonus = 0;
+        knockbackBonus = 0;
     }
 }
