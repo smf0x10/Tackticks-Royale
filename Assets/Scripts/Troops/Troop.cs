@@ -175,6 +175,7 @@ public class Troop : MonoBehaviour
     protected virtual void Update()
     {
         ChooseTarget();
+        agent.speed = GetMoveSpeed();
         if (atkTime > 0)
         {
             atkTime -= Time.deltaTime;
@@ -404,6 +405,22 @@ public class Troop : MonoBehaviour
     /// Run every frame while this troop is in its king's area of effect
     /// </summary>
     public virtual void UpdateWhileKingBuffed()
+    {
+
+    }
+
+    /// <summary>
+    /// Run when entering the king's area of effect
+    /// </summary>
+    public virtual void GainKingBuff()
+    {
+
+    }
+
+    /// <summary>
+    /// Run when exiting the king's area of effect. Any changes made when gaining a king buff should be undone here
+    /// </summary>
+    public virtual void LoseKingBuff()
     {
 
     }

@@ -52,6 +52,7 @@ public class King : Troop
             return;
         }
         inRange.Add(other.GetComponent<Troop>());
+        other.GetComponent<Troop>().GainKingBuff();
     }
 
     protected override void Update()
@@ -77,6 +78,7 @@ public class King : Troop
             return;
         }
         Debug.Log("Exunt");
+        other.GetComponent<Troop>().LoseKingBuff();
         inRange.Remove(other.GetComponent<Troop>());
     }
 }

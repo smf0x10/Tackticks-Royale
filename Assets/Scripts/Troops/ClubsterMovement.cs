@@ -2,6 +2,9 @@
 
 public class ClubsterMovement : Troop
 {
+    private float sweepRangeBonus = 0;
+    private float atkDelayBonus = 0;
+    private float moveSpeedBonus = 0;
     public override int GetMaxHp()
     {
         return 10;
@@ -14,7 +17,7 @@ public class ClubsterMovement : Troop
 
     public override float GetAtkDelay()
     {
-        return 2;
+        return 2 - atkDelayBonus;
     }
 
     public override float GetKnockback()
@@ -24,7 +27,7 @@ public class ClubsterMovement : Troop
 
     public override float GetAtkRange()
     {
-        return 2.7f;
+        return 2.6f;
     }
 
     public override float GetGetUpDelay()
@@ -34,7 +37,7 @@ public class ClubsterMovement : Troop
 
     public override float GetMoveSpeed()
     {
-        return 1.5f;
+        return 1.5f + moveSpeedBonus;
     }
 
     public override float GetKnockbackThreshold()
@@ -48,13 +51,26 @@ public class ClubsterMovement : Troop
 
         foreach (Troop t in activeTroops)
         {
-            if (t.GetTeam() != GetTeam() && t != atkTarget && Vector3.Distance(transform.position, t.transform.position) <= GetAtkRange() + 0.5f)
+            if (t.GetTeam() != GetTeam() && t != atkTarget && Vector3.Distance(transform.position, t.transform.position) <= GetAtkRange() + 0.7f + sweepRangeBonus)
             {
                 t.TakeDamage(this, GetAtk() - 1, true, GetKnockback());
             }
         }
     }
 
-    
+    public override void GainKingBuff()
+    {
+        sweepRangeBonus = 0.5f;
+        atkDelayBonus = 0.5f;
+        moveSpeedBonus = 0.5f;
+    }
+
+    public override void LoseKingBuff()
+    {
+        sweepRangeBonus = 0;
+        atkDelayBonus = 0;
+        moveSpeedBonus = 0;
+    }
+
 }
 
