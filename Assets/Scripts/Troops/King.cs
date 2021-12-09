@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class King : Troop
@@ -32,7 +31,7 @@ public class King : Troop
 
     public override float GetGetUpDelay()
     {
-        return 0.8f;
+        return 0.2f;
     }
 
     public override float GetMoveSpeed()
@@ -77,7 +76,6 @@ public class King : Troop
         {
             return;
         }
-        Debug.Log("Exunt");
         other.GetComponent<Troop>().LoseKingBuff();
         inRange.Remove(other.GetComponent<Troop>());
     }
