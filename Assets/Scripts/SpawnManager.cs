@@ -48,7 +48,7 @@ public class SpawnManager: MonoBehaviour {
         FKing kingForm = ScriptableObject.CreateInstance<FKing>();
         kingForm.TrySpawnFormation(this);
         king = kingForm.GetLastTroopSpawned();
-        Debug.Log(king);
+        king.SetSpawnManager(this);
 
         summonEnergy = 5;
         for (int i = 0; i < formations.Length; i++)
@@ -192,6 +192,14 @@ public class SpawnManager: MonoBehaviour {
             draggingOrigin = hit.point;
             draggingSelection = true;
         }
+    }
+
+    /// <summary>
+    /// Caueses this spawn manager to lose the game
+    /// </summary>
+    public void Lose()
+    {
+        Debug.Log(team + " lost");
     }
 
     /// <summary>

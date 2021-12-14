@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 997
   m_ShowMode: 4
-  m_Title: Game
+  m_Title: Scene
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -102,7 +102,7 @@ MonoBehaviour:
   m_MinSize: {x: 708, y: 492}
   m_MaxSize: {x: 18003, y: 14042}
   vertical: 0
-  controlID: 103
+  controlID: 91
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -176,7 +176,7 @@ MonoBehaviour:
   m_MinSize: {x: 232, y: 492}
   m_MaxSize: {x: 10002, y: 14042}
   vertical: 1
-  controlID: 83
+  controlID: 65
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -509,12 +509,12 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Prefabs
+    - Assets/Scripts/Troops
     m_Globs: []
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Prefabs
+  - Assets/Scripts/Troops
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\smfwi\Desktop\smfwii-takticks-royale-_local-4\Takticks
     Royale
@@ -522,8 +522,8 @@ MonoBehaviour:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: aa400000
-    m_LastClickedID: 16554
+    m_SelectedIDs: 34410000
+    m_LastClickedID: 16692
     m_ExpandedIDs: 00000000a0400000a2400000ae40000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -735,9 +735,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 0.28866088, y: 4.2783318, z: 13.067272}
+    m_Target: {x: 493.31635, y: 566.441, z: -108.16498}
     speed: 2
-    m_Value: {x: 0.28866088, y: 4.2783318, z: 13.067272}
+    m_Value: {x: 493.31635, y: 566.441, z: -108.16498}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -784,13 +784,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.18965556, y: 0.009156705, z: -0.0016942621, w: 0.9818805}
+    m_Target: {x: 0.29245633, y: 0.4507804, z: -0.15894441, w: 0.82834715}
     speed: 2
-    m_Value: {x: 0.18964179, y: 0.00915604, z: -0.0016941392, w: 0.9818092}
+    m_Value: {x: 0.29243353, y: 0.45074525, z: -0.15893202, w: 0.8282826}
   m_Size:
-    m_Target: 36.62448
+    m_Target: 369.94232
     speed: 2
-    m_Value: 36.62448
+    m_Value: 369.94232
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -846,7 +846,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 923d0000
       m_LastClickedID: 15762
-      m_ExpandedIDs: 58fbffff923d0000fc3d0000
+      m_ExpandedIDs: 58fbfffffc3d0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
