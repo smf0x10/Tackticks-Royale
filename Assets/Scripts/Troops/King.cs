@@ -3,7 +3,10 @@ using UnityEngine;
 
 public class King : Troop
 {
-    private List<Troop> inRange = new List<Troop>();
+    private readonly List<Troop> inRange = new List<Troop>();
+
+    private SpawnManager manager;
+
     public override int GetMaxHp()
     {
         return 30;
@@ -78,5 +81,19 @@ public class King : Troop
         }
         other.GetComponent<Troop>().LoseKingBuff();
         inRange.Remove(other.GetComponent<Troop>());
+    }
+
+    protected override void Die()
+    {
+        manager.Lose();
+        base.Die();
+    }
+
+    /// <summary>
+    /// Gives this king a reference to the spawn manager to use when it dies
+    /// </summary>
+    public void SetSpawnManager(SpawnManager sm)
+    {
+        manager = sm;
     }
 }

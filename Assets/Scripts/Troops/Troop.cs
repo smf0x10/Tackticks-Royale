@@ -36,14 +36,22 @@ public class Troop : MonoBehaviour
     {
         if (hp <= 0 || transform.position.y < DEATH_HEIGHT)
         {
-            activeTroops.Remove(this);
-            if (IsRallied)
-            {
-                rallyTarget.RemoveTroopTarget();
-            }
-            Instantiate(TroopRegistry.instance.GetDeathParticle(), transform.position, transform.rotation);
-            Destroy(gameObject);
+            Die();
         }
+    }
+
+    /// <summary>
+    /// Kills this troop, removes it from the list of active troops, and lets the rally point know what happened
+    /// </summary>
+    protected virtual void Die()
+    {
+        activeTroops.Remove(this);
+        if (IsRallied)
+        {
+            rallyTarget.RemoveTroopTarget();
+        }
+        Instantiate(TroopRegistry.instance.GetDeathParticle(), transform.position, transform.rotation);
+        Destroy(gameObject);
     }
 
     /// <summary>

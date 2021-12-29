@@ -33,6 +33,8 @@ public class SpawnManager: MonoBehaviour {
     private Vector3 draggingOrigin;
     private RaycastHit currentDrag;
 
+    private bool ignoreClick = false; // Gets set to true when the mouse is over a UI element
+
     private List<Troop> selectedTroops;
     public static float SE_FILL_SPEED = 1f;
 
@@ -48,7 +50,7 @@ public class SpawnManager: MonoBehaviour {
         FKing kingForm = ScriptableObject.CreateInstance<FKing>();
         kingForm.TrySpawnFormation(this);
         king = kingForm.GetLastTroopSpawned();
-        Debug.Log(king);
+        king.SetSpawnManager(this);
 
         summonEnergy = 5;
         for (int i = 0; i < formations.Length; i++)
@@ -118,6 +120,7 @@ public class SpawnManager: MonoBehaviour {
         {
             cameraMovement.MoveForward(scroll * scrollSensitivity);
         }
+        ignoreClick = eventSystem.IsPointerOverGameObject();
 	}
 
     /// <summary>
@@ -135,7 +138,14 @@ public class SpawnManager: MonoBehaviour {
     /// <param name="ctx">Use ReadValueAsObject and cast to Vector2 to get the mouse delta</param>
     public void OnMouse(InputAction.CallbackContext ctx)
     {
-        mouseDelta = (Vector2)ctx.ReadValueAsObject();
+        Debug.Log(ctx.ReadValueAsObject());
+        object ctxObj = ctx.ReadValueAsObject();
+        if (ctxObj == null)
+        {
+            mouseDelta = Vector2.zero;
+            return;
+        }
+        mouseDelta = (Vector2)ctxObj;
     }
 
     /// <summary>
@@ -144,7 +154,13 @@ public class SpawnManager: MonoBehaviour {
     /// <param name="ctx">Use ReadValueAsObject() and cast to float to get the scroll value</param>
     public void OnScroll(InputAction.CallbackContext ctx)
     {
-        scroll = (float)ctx.ReadValueAsObject();
+        object ctxObj = ctx.ReadValueAsObject();
+        if (ctxObj == null)
+        {
+            scroll = 0;
+            return;
+        }
+        scroll = (float)ctxObj;
     }
 
     /// <summary>
@@ -154,7 +170,7 @@ public class SpawnManager: MonoBehaviour {
     {
         bool mouseWasDown = mouseDown;
         mouseDown = ctx.ReadValueAsButton();
-        if (mouseDown && (mouseWasDown || eventSystem.IsPointerOverGameObject()))
+        if (mouseDown && (mouseWasDown || ignoreClick))
         {
             return; // To stop the event from triggering twice upon pressing the mouse or from clicking buttons
         }
@@ -192,6 +208,14 @@ public class SpawnManager: MonoBehaviour {
             draggingOrigin = hit.point;
             draggingSelection = true;
         }
+    }
+
+    /// <summary>
+    /// Caueses this spawn manager to lose the game
+    /// </summary>
+    public void Lose()
+    {
+        Debug.Log(team + " lost");
     }
 
     /// <summary>
