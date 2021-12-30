@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// The player script. One of these gets instantiated for each player.
@@ -21,7 +22,8 @@ public class SpawnManager: MonoBehaviour {
 
     [SerializeField] private GameObject selectionCommands;
     [SerializeField] private GameObject generalCommands;
-    [SerializeField] private UnityEngine.EventSystems.EventSystem eventSystem;
+    [SerializeField] private EventSystem eventSystem;
+    [SerializeField] private GameObject startButton;
 
     // Rally troop selection
     [SerializeField] private Camera cam;
@@ -33,6 +35,8 @@ public class SpawnManager: MonoBehaviour {
     private Vector3 draggingOrigin;
     private RaycastHit currentDrag;
 
+    private bool ignoreClick = false; // Gets set to true when the mouse is over a UI element
+
     private List<Troop> selectedTroops;
     public static float SE_FILL_SPEED = 1f;
 
@@ -40,11 +44,17 @@ public class SpawnManager: MonoBehaviour {
 
     private const int NO_TROOP_COLLISIONS = ~(1 << 9); // Pass into the layermask parameter of a raycast to ignore troops
 
+    private bool gameStarted = false;
+
 
     private void Awake()
     {
         cameraMovement.SetTeam(team);
+        DontDestroyOnLoad(this);
+    }
 
+    public void StartGame()
+    {
         FKing kingForm = ScriptableObject.CreateInstance<FKing>();
         kingForm.TrySpawnFormation(this);
         king = kingForm.GetLastTroopSpawned();
@@ -60,6 +70,10 @@ public class SpawnManager: MonoBehaviour {
 
             sp.onClick.AddListener(() => tf.TrySpawnFormation(this));
         }
+
+        gameStarted = true;
+        eventSystem = FindObjectOfType<EventSystem>();
+        startButton.SetActive(false);
     }
 
     /// <summary>
@@ -98,6 +112,10 @@ public class SpawnManager: MonoBehaviour {
 	
 	void Update ()
     {
+        if (!gameStarted)
+        {
+            return;
+        }
         if (summonEnergy < 20f)
         {
             summonEnergy += SE_FILL_SPEED * Time.deltaTime;
@@ -118,6 +136,7 @@ public class SpawnManager: MonoBehaviour {
         {
             cameraMovement.MoveForward(scroll * scrollSensitivity);
         }
+        ignoreClick = eventSystem.IsPointerOverGameObject();
 	}
 
     /// <summary>
@@ -135,7 +154,13 @@ public class SpawnManager: MonoBehaviour {
     /// <param name="ctx">Use ReadValueAsObject and cast to Vector2 to get the mouse delta</param>
     public void OnMouse(InputAction.CallbackContext ctx)
     {
-        mouseDelta = (Vector2)ctx.ReadValueAsObject();
+        object ctxObj = ctx.ReadValueAsObject();
+        if (ctxObj == null)
+        {
+            mouseDelta = Vector2.zero;
+            return;
+        }
+        mouseDelta = (Vector2)ctxObj;
     }
 
     /// <summary>
@@ -144,7 +169,13 @@ public class SpawnManager: MonoBehaviour {
     /// <param name="ctx">Use ReadValueAsObject() and cast to float to get the scroll value</param>
     public void OnScroll(InputAction.CallbackContext ctx)
     {
-        scroll = (float)ctx.ReadValueAsObject();
+        object ctxObj = ctx.ReadValueAsObject();
+        if (ctxObj == null)
+        {
+            scroll = 0;
+            return;
+        }
+        scroll = (float)ctxObj;
     }
 
     /// <summary>
@@ -152,9 +183,13 @@ public class SpawnManager: MonoBehaviour {
     /// </summary>
     public void OnClick(InputAction.CallbackContext ctx)
     {
+        if (!gameStarted)
+        {
+            return;
+        }
         bool mouseWasDown = mouseDown;
         mouseDown = ctx.ReadValueAsButton();
-        if (mouseDown && (mouseWasDown || eventSystem.IsPointerOverGameObject()))
+        if (mouseDown && (mouseWasDown || ignoreClick))
         {
             return; // To stop the event from triggering twice upon pressing the mouse or from clicking buttons
         }

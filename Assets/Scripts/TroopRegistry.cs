@@ -80,6 +80,7 @@ public class TroopRegistry : MonoBehaviour
 
     private void Awake()
     {
+        DontDestroyOnLoad(this);
         instance = this;
     }
 }
