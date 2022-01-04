@@ -8,7 +8,7 @@ public class FKing : TroopFormation
 
     protected override void SpawnFormation(Team team)
     {
-        lastSpawned = (King) SpawnTroop(TroopType.KING, team);
+        SpawnTroop(TroopType.KING, team);
     }
 
     /// <summary>

@@ -1,13 +1,22 @@
 ﻿using System;
+using Unity.Netcode;
 using UnityEngine;
 
 /// <summary>
 /// Class representing a troop formation. One subclass of this is instantiated for each spawn button on the HUD. Subclasses of this class are named starting with an F
 /// example: FSoldiers
+/// 
+/// Being ScriptableObjects, TroopFormations only exist on the client side.
 /// </summary>
 public class TroopFormation : ScriptableObject
 {
     private const int DEFAULT_COST = 1;
+    private static SpawnManager spawnManager; // Since TroopFormation objects are not networked, this should be different for each player
+
+    public static void SetSpawnManager(SpawnManager newSpawnManager)
+    {
+        spawnManager = newSpawnManager;
+    }
 
     /// <summary>
     /// Returns the summon energy cost of this formation. Override this method to change it
@@ -30,28 +39,11 @@ public class TroopFormation : ScriptableObject
     /// <summary>
     /// Spawns a single troop of the given type on the given team
     /// </summary>
-    /// <param name="troop">The troop to spawn</param>
+    /// <param name="troopType">The troop to spawn</param>
     /// <param name="team">The side the troop is on</param>
-    /// <returns>A reference to the instantiated troop</returns>
-    protected static Troop SpawnTroop(TroopType troopType, Team team)
+    protected static void SpawnTroop(TroopType troopType, Team team)
     {
-        Vector3 pos;
-        Quaternion rot;
-        if (team == Team.Blue)
-        {
-            pos = TroopRegistry.instance.GetBlueSpawn().position;
-            rot = TroopRegistry.instance.GetBlueSpawn().rotation;
-        }
-        else
-        {
-            pos = TroopRegistry.instance.GetRedSpawn().position;
-            rot = TroopRegistry.instance.GetRedSpawn().rotation;
-        }
-
-        GameObject newTroop = Instantiate(TroopRegistry.instance.GetTroopPrefab(troopType), pos, rot);
-
-        newTroop.GetComponent<Troop>().SetTeam(team);
-        return newTroop.GetComponent<Troop>();
+        spawnManager.SpawnTroopServerRpc(troopType, team); // Actual spawning of troops has to be done by a networked object
     }
 
     /// <summary>

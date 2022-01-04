@@ -3,11 +3,13 @@ using UnityEngine.UI;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using Unity.Netcode;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// The player script. One of these gets instantiated for each player.
 /// </summary>
-public class SpawnManager: MonoBehaviour {
+public class SpawnManager: NetworkBehaviour {
     private float summonEnergy;
     [SerializeField] private CameraMovement cameraMovement;
     private Vector2 mouseDelta = new Vector2();
@@ -53,12 +55,33 @@ public class SpawnManager: MonoBehaviour {
         DontDestroyOnLoad(this);
     }
 
+    public override void OnNetworkSpawn()
+    {
+        if (!IsOwner)
+        {
+            canvas.gameObject.SetActive(false);
+            cam.gameObject.SetActive(false);
+        }
+        if (OwnerClientId == 0)
+        {
+            team = Team.Blue;
+        }
+        else
+        {
+            team = Team.Red;
+        }
+    }
+
     public void StartGame()
     {
-        FKing kingForm = ScriptableObject.CreateInstance<FKing>();
-        kingForm.TrySpawnFormation(this);
-        king = kingForm.GetLastTroopSpawned();
-        king.SetSpawnManager(this);
+        Debug.Log(OwnerClientId);
+        Debug.Log(IsOwner);
+        SpawnTroopServerRpc(TroopType.KING, team);
+        TroopFormation.SetSpawnManager(this);
+        //FKing kingForm = ScriptableObject.CreateInstance<FKing>();
+        //kingForm.TrySpawnFormation(this);
+        //king = kingForm.GetLastTroopSpawned();
+        //king.SetSpawnManager(this);
 
         summonEnergy = 5;
         for (int i = 0; i < formations.Length; i++)
@@ -319,6 +342,32 @@ public class SpawnManager: MonoBehaviour {
         {
             t.RemoveRallyTarget();
         }
+    }
+
+
+
+    /// <summary>
+    /// Spawns the specified object on the network side.
+    /// </summary>
+    [ServerRpc]
+    public void SpawnTroopServerRpc(TroopType troopType, Team team)
+    {
+        Vector3 pos;
+        Quaternion rot;
+        if (team == Team.Blue)
+        {
+            pos = TroopRegistry.instance.GetBlueSpawn().position;
+            rot = TroopRegistry.instance.GetBlueSpawn().rotation;
+        }
+        else
+        {
+            pos = TroopRegistry.instance.GetRedSpawn().position;
+            rot = TroopRegistry.instance.GetRedSpawn().rotation;
+        }
+
+        GameObject newTroop = Instantiate(TroopRegistry.instance.GetTroopPrefab(troopType), pos, rot);
+        newTroop.GetComponent<Troop>().SetTeam(team);
+        newTroop.GetComponent<NetworkObject>().Spawn();
     }
 }
 
