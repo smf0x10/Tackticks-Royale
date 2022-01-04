@@ -18,6 +18,13 @@ Current plans:
 -Add a "rally system" to select a group of troops and direct them to hold
 a certain point: done (but might improve it a bit later)
 
--Add an objective to win the game: not started
+-Add an objective to win the game: done for now
 
--Reimplement multiplayer: not started
+-Reimplement multiplayer: started; being developed on the test branch as a lot of things are still broken
+
+-Cleaning up in the aftermath or reimplementing multpilayer: Not started
+
+-Add more troop types: not started
+
+-Add a "loadout" system for troops; players can select 3-5 of the troop formations to be available to spawn: 
+Not started, and there are only 3 formations in the game at the moment
