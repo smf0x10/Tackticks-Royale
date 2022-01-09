@@ -1,26 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Unity.Netcode;
 
 /// <summary>
 /// Base class for all troops
 /// </summary>
-public class Troop : MonoBehaviour
+public class Troop : NetworkBehaviour
 {
     private Transform target;
     private float lastDist;
     private float atkTime;
     protected int hp;
-    [SerializeField] private Team team;
+    [SerializeField] private NetworkVariable<Team> team;
     [SerializeField] private MeshRenderer[] teamClothes; // Mesh renderers to change color depending on the team
     private float knockbackToNextTopple;
     private Animator animator;
     private NavMeshAgent agent;
     private Rigidbody rb;
     private float timeToGetUp;
-    protected bool IsRallied { get; set; }
+    protected NetworkVariable<bool> IsRallied { get; set; }
     private RallyPoint rallyTarget;
+    private NetworkVariable<Vector3> rallyPos; // Stores the position of the rally point, for pathfinding. Can't just use the position property of the rallyTarget because that variable can't be synced
     private GameObject selectedIndicator;
 
     protected static List<Troop> activeTroops = new List<Troop>();
@@ -40,13 +41,26 @@ public class Troop : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        activeTroops.Add(this);
+        agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
+        atkTime = GetAtkDelay();
+        hp = GetMaxHp();
+        agent.speed = GetMoveSpeed();
+        knockbackToNextTopple = GetKnockbackThreshold();
+        Init();
+    }
+
     /// <summary>
     /// Kills this troop, removes it from the list of active troops, and lets the rally point know what happened
     /// </summary>
     protected virtual void Die()
     {
         activeTroops.Remove(this);
-        if (IsRallied)
+        if (IsRallied.Value)
         {
             rallyTarget.RemoveTroopTarget();
         }
@@ -79,19 +93,6 @@ public class Troop : MonoBehaviour
             }
         }
         return ret;
-    }
-
-    private void Awake()
-    {
-        activeTroops.Add(this);
-        agent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody>();
-        atkTime = GetAtkDelay();
-        hp = GetMaxHp();
-        agent.speed = GetMoveSpeed();
-        knockbackToNextTopple = GetKnockbackThreshold();
-        Init();
     }
 
     /// <summary>
@@ -202,7 +203,7 @@ public class Troop : MonoBehaviour
         lastDist = int.MaxValue;
         for (int i = 0; i < activeTroops.Count; i++)
         {
-            if (activeTroops[i].GetTeam() == team)
+            if (activeTroops[i].GetTeam() == team.Value)
                 continue;
             if (Vector3.Distance(activeTroops[i].transform.position, transform.position) < lastDist)
             {
@@ -231,13 +232,14 @@ public class Troop : MonoBehaviour
         else if (agent.enabled)
         {
             agent.isStopped = false;
-            if (IsRallied)
+            if (IsRallied.Value)
             {
-                agent.destination = rallyTarget.transform.position;
+                //agent.destination = rallyTarget.transform.position;
+                agent.SetDestination(rallyPos.Value);
             }
             else
             {
-                if (team == Team.Blue)
+                if (team.Value == Team.Blue)
                 {
                     agent.destination = TroopRegistry.instance.GetRedSpawn().position;
                 }
@@ -266,8 +268,8 @@ public class Troop : MonoBehaviour
     /// <returns></returns>
     protected virtual bool CanTarget(Transform other)
     {
-        return Vector3.Distance(transform.position, other.position) < GetTargetDistance(IsRallied) || 
-            (IsRallied && Vector3.Distance(rallyTarget.transform.position, other.position) < GetRallyDefendDistance());
+        return Vector3.Distance(transform.position, other.position) < GetTargetDistance(IsRallied.Value) || 
+            (IsRallied.Value && Vector3.Distance(rallyPos.Value, other.position) < GetRallyDefendDistance());
     }
 
     /// <summary>
@@ -319,7 +321,7 @@ public class Troop : MonoBehaviour
     /// <returns>Team.BLUE or Team.RED</returns>
     public Team GetTeam()
     {
-        return team;
+        return team.Value;
     }
 
     /// <summary>
@@ -329,7 +331,7 @@ public class Troop : MonoBehaviour
     public void SetTeam(Team t)
     {
         // TODO: Set the troop's clothes
-        team = t;
+        team.Value = t;
         foreach (MeshRenderer m in teamClothes)
         {
             if (t == Team.Red)
@@ -363,13 +365,13 @@ public class Troop : MonoBehaviour
 
 
     /// <summary>
-    /// Sets this troop to target the specified point
+    /// Sets this troop to target the specified point. Only works on the client that owns this troop
     /// </summary>
     /// <param name="newTarget">The rally point to target (must be instantiated before this function is run</param>
     public void SetRallyTarget(RallyPoint newTarget)
     {
         Deselect();
-        if (IsRallied)
+        if (IsRallied.Value)
         {
             if (newTarget == rallyTarget)
             {
@@ -378,9 +380,29 @@ public class Troop : MonoBehaviour
             rallyTarget.RemoveTroopTarget();
         }
         rallyTarget = newTarget;
+        SetRallyTargetServerRpc(newTarget.transform.position);
         rallyTarget.AddTroopTarget();
-        IsRallied = true;
         //Debug.Log(newTarget);
+    }
+
+    /// <summary>
+    /// Sets the rally target on the server side. Only takes a position value, since physical rally points don't exist on the server side
+    /// </summary>
+    /// <param name="newPos">The new position to target</param>
+    [ServerRpc]
+    private void SetRallyTargetServerRpc(Vector3 newPos)
+    {
+        rallyPos.Value = newPos;
+        IsRallied.Value = true;
+    }
+
+    /// <summary>
+    /// Removes the rally target on the server side. This only changes the IsRallied variable; all physical rally point manipulation happens client-side
+    /// </summary>
+    [ServerRpc]
+    private void RemoveRallyTargetServerRpc()
+    {
+        IsRallied.Value = false;
     }
 
     /// <summary>
@@ -389,11 +411,11 @@ public class Troop : MonoBehaviour
     public void RemoveRallyTarget()
     {
         Deselect();
-        if (IsRallied)
+        if (IsRallied.Value)
         {
             rallyTarget.RemoveTroopTarget();
         }
-        IsRallied = false;
+        RemoveRallyTargetServerRpc();
     }
 
     public void Select()

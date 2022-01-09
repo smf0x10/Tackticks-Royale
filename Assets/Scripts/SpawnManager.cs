@@ -368,6 +368,7 @@ public class SpawnManager: NetworkBehaviour {
         GameObject newTroop = Instantiate(TroopRegistry.instance.GetTroopPrefab(troopType), pos, rot);
         newTroop.GetComponent<Troop>().SetTeam(team);
         newTroop.GetComponent<NetworkObject>().Spawn();
+        newTroop.GetComponent<NetworkObject>().ChangeOwnership(OwnerClientId);
     }
 }
 

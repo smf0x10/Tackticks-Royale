@@ -31,7 +31,7 @@ public class ProjectileTroop : Troop
             return base.CanTarget(other);
         }
         float heightAdvantage = transform.position.y - other.transform.position.y;
-        return Vector3.Distance(transform.position, other.position) <= Mathf.Sqrt(Mathf.Pow(GetTargetDistance(IsRallied) + heightAdvantage, 2) + Mathf.Pow(2 * heightAdvantage, 2));
+        return Vector3.Distance(transform.position, other.position) <= Mathf.Sqrt(Mathf.Pow(GetTargetDistance(IsRallied.Value) + heightAdvantage, 2) + Mathf.Pow(2 * heightAdvantage, 2));
     }
 
     protected override bool IsInRange(Transform other)
