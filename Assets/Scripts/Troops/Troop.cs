@@ -65,7 +65,10 @@ public class Troop : NetworkBehaviour
             rallyTarget.RemoveTroopTarget();
         }
         Instantiate(TroopRegistry.instance.GetDeathParticle(), transform.position, transform.rotation);
-        Destroy(gameObject);
+        if (IsOwner)
+        {
+            DestroyServerRpc();
+        }
     }
 
     /// <summary>
@@ -203,7 +206,7 @@ public class Troop : NetworkBehaviour
         lastDist = int.MaxValue;
         for (int i = 0; i < activeTroops.Count; i++)
         {
-            if (activeTroops[i].GetTeam() == team.Value)
+            if (activeTroops[i] == null || activeTroops[i].GetTeam() == team.Value)
                 continue;
             if (Vector3.Distance(activeTroops[i].transform.position, transform.position) < lastDist)
             {
@@ -403,6 +406,19 @@ public class Troop : NetworkBehaviour
     private void RemoveRallyTargetServerRpc()
     {
         IsRallied.Value = false;
+    }
+
+    /// <summary>
+    /// To be used when this troop dies to properly remove it
+    /// </summary>
+    [ServerRpc]
+    private void DestroyServerRpc()
+    {
+        if (activeTroops.Contains(this))
+        {
+            activeTroops.Remove(this);
+        }
+        GetComponent<NetworkObject>().Despawn(true);
     }
 
     /// <summary>
